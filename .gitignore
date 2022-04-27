@@ -1,1 +1,6 @@
-/venv_clinidmap/*
+**/venv_clinidmap
+**/logs 
+**/.vscode
+*.pyc
+*.log
+.idea
