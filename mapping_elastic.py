@@ -3,8 +3,6 @@ import json
 import time
 import argparse
 
-# from search_term import search 
-
 from elastic_search import query_search, result2list_, result2list_unique, get_query, get_umls_query, get_umls2sab_query
 from elastic_utils import get_elastic
 

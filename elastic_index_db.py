@@ -5,6 +5,7 @@ from elastic_utils import get_elastic, check_elastic_index_names, doc_generator,
 
 import os
 import logging
+import pandas as pd
 
 import logging
 logger = logging.getLogger(__name__)

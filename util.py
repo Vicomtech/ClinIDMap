@@ -44,25 +44,6 @@ def get_icd_10_es_descr(icd_code_list, df_icd_es):
     return icd_10_descr_es_lst
 
 
-def remove_O(dps): 
-    # removes O label from string
-    new_dps = []
-    for lst in dps: 
-        # print(i)
-        # i = i.split()
-        if len(lst) > 1 and 'O' in lst:
-            lst_new = [x for x in lst if x != 'O']
-            i = list(set(lst_new))
-            # print(i)
-            if len(i) == 0: 
-                new_dps.append('O')
-            else: 
-                new_dps.append(''.join(i))
-        else: 
-            lst = list(set(lst))
-            new_dps.append(''.join(lst))
-    return new_dps
-
 def remove_duplicates(lst): 
     lst_uniq = []
     for i in lst: 
