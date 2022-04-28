@@ -6,6 +6,8 @@ import json
 import time
 import argparse
 
+import config
+
 # from search_term import search 
 
 from elastic_search import query_search, result2list_, result2list_unique, get_query, get_umls_query, get_umls2sab_query
@@ -17,20 +19,18 @@ start = time.time()
 
 class ClinIDMapper: 
     def __init__(self, source_type, source_id, wiki, elastic=None):
-        print(type(wiki))
-        print(wiki)
         self.wiki = wiki
-        print(self.wiki )
         self.umls = 'umls' 
-        self.snomed2icd10 = 'snomed2icd10'
-        self.snomed_es = 'snomed_es'
-        self.snomed_en = 'snomed_en'
-        # semantic_types = 'semantic_types'
-        self.icd10pcs = 'icd10pcs'
-        self.icd10cm = 'icd10cm'
-        self.cui2wiki = 'cui2wiki'
-        self.mesh2wiki = 'mesh2wiki'
-        self.wordnet2wiki = 'wordnet2wiki'
+        self.snomed2icd10 = config.SNOMED2ICD10
+        self.snomed_es = config.SNOMED_ES
+        self.snomed_en = config.SNOMED_EN
+        self.icd10pcs = config.ICD10PCS
+        self.icd10cm = config.ICD10CM
+        self.cui2wiki = config.CUI2WIKI
+        self.mesh2wiki = config.MESH2WIKI
+        # TODO
+        # self.wordnet2wiki = config.WORDNET2WIKI
+        # semantic_types = config.SEMANTIC_TYPES
         self.umls_cuis = None 
         self.elastic = elastic
         self.result = {}
@@ -377,8 +377,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    # print(args.accumulate(args.source_type))
-    # print(args.accumulate(args.source_id))
     # source_id = 'C0020587' #C0026845 # 'C0011860' #C0026845 # ICD-10-PCS C0020587 C0020587
     # source_type = 'UMLS'
     # source_type = 'UMLS' # 'C0011860' # ICD10CM # SNOMED # WORD # ICD10PCS
@@ -386,7 +384,6 @@ if __name__ == "__main__":
     # source_id = '2006300612' # SNOMEDCT # 19997007 # 20016009 # 20063006
     # source_id = 'H35.35' # H35.352   # ICD10CM
 
-    # print(index_names)
     # source_id = 'C0020587' #C0026845 # 'C0011860' #C0026845 # ICD-10-PCS C0020587 C0020587
     # source_type = 'UMLS'
 
@@ -403,16 +400,13 @@ if __name__ == "__main__":
 
     mapper = ClinIDMapper(args.source_type, args.source_id, args.wiki)
     result_dict = mapper.map()
-    # print(result_dict)
+
     for k, v in result_dict.items(): 
         print(k)
         print(v)
 
     with open(args.source_type+'_'+args.source_id+'.json', 'w', encoding='utf-8') as f:
         json.dump(result_dict, f, ensure_ascii=False, indent=4)
-
-
-
 
 
 

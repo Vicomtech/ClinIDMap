@@ -1,0 +1,11 @@
+## Elastic indices names
+UMLS = 'umls' 
+SNOMED2ICD10 = 'snomed2icd10'
+SNOMED_ES = 'snomed_es'
+SNOMED_EN = 'snomed_en'
+SEMANTIC_TYPES = 'semantic_types'
+ICD10PCS = 'icd10pcs'
+ICD10CM = 'icd10cm'
+CUI2WIKI = 'cui2wiki'
+MESH2WIKI = 'mesh2wiki'
+WORDNET2WIKI = 'wordnet2wiki'
