@@ -1,7 +1,12 @@
 import os
+from xmlrpc.client import boolean
+from xxlimited import Str
+import numpy as np
 import json
 import time
 import argparse
+
+# from search_term import search 
 
 from elastic_search import query_search, result2list_, result2list_unique, get_query, get_umls_query, get_umls2sab_query
 from elastic_utils import get_elastic
@@ -11,8 +16,11 @@ from util import wikidata2wikipedia_urls
 start = time.time()
 
 class ClinIDMapper: 
-    def __init__(self, source_type, source_id, wiki=True, elastic=None):
+    def __init__(self, source_type, source_id, wiki, elastic=None):
+        print(type(wiki))
+        print(wiki)
         self.wiki = wiki
+        print(self.wiki )
         self.umls = 'umls' 
         self.snomed2icd10 = 'snomed2icd10'
         self.snomed_es = 'snomed_es'
@@ -363,8 +371,12 @@ if __name__ == "__main__":
 
     parser.add_argument('source_type', type=str, help='Type of taxonomy to map with')
     parser.add_argument('source_id', type=str, help='ID from the taxonomy to map')
+    parser.add_argument('--wiki', action='store_true')
+    parser.add_argument('--no-wiki', action='store_false')
+    parser.set_defaults(feature=True)
 
     args = parser.parse_args()
+
     # print(args.accumulate(args.source_type))
     # print(args.accumulate(args.source_id))
     # source_id = 'C0020587' #C0026845 # 'C0011860' #C0026845 # ICD-10-PCS C0020587 C0020587
@@ -389,15 +401,18 @@ if __name__ == "__main__":
     # source_type = 'ICD10PCS'
     # print('Source type to map:', source_type)
 
-    mapper = ClinIDMapper(args.source_type, args.source_id)
+    mapper = ClinIDMapper(args.source_type, args.source_id, args.wiki)
     result_dict = mapper.map()
     # print(result_dict)
     for k, v in result_dict.items(): 
         print(k)
         print(v)
 
-    with open(args.source_type+'_'+args.source_id+'result.json', 'w', encoding='utf-8') as f:
+    with open(args.source_type+'_'+args.source_id+'.json', 'w', encoding='utf-8') as f:
         json.dump(result_dict, f, ensure_ascii=False, indent=4)
+
+
+
 
 
 
