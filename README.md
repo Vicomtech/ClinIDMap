@@ -10,13 +10,21 @@ knowledge bases.
 Before starting, the following databases should be downloaded. We do not provide the databases (ontologies and taxonomies), as they depend on the licences and cannot be publicly distributed. 
 
 UMLS Metathesaurus https://www.nlm.nih.gov/research/umls/licensedcontent/umlsknowledgesources.html
+
 SNOMED-CT 2 ICD-10 Map https://www.nlm.nih.gov/research/umls/mapping_projects/snomedct_to_icd10cm.html
+
 SNOMED-CT International Edition https://www.nlm.nih.gov/healthit/snomedct/international.html 
+
 SNOMED_CT Spanish Edition https://www.nlm.nih.gov/healthit/snomedct/international.html
+
 ICD-10 CM and PCS International
+
 ICD-10 CM and PCS Spanish Version https://www.sanidad.gob.es/fr/estadEstudios/estadisticas/normalizacion/home.htm
 
+These databeses will be uploaded and indexed in Elasticseach, which should be installed on your device. 
+
 ### Configuration 
+
 
 ### CLI use 
 
