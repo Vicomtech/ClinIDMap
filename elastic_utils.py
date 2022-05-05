@@ -19,8 +19,10 @@ def get_header_names(headers_list):
 def filterKeys(document, headers):
     return {key: document[key] for key in headers}
 
-def doc_generator(df, index_name, headers):
+def doc_generator(df, index_name):
+    headers = list(df.columns)
     df_iter = df.iterrows()
+    # print(df_iter)
     for index, document in df_iter:
         yield {
                 "_index": index_name,
@@ -59,9 +61,9 @@ def check_elastic_index_names(elastic=None):
 def get_elastic():
     return Elasticsearch(
         [{'host': 'localhost', 'port': 9200, 'scheme': 'http'}], 
-        timeout=50, 
-        max_retries=10, 
-        retry_on_timeout=True
+        timeout=30, 
+        max_retries=1, 
+        retry_on_timeout=False
         )
 
 

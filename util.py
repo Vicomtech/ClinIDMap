@@ -58,3 +58,5 @@ def wikidata2wikipedia_urls(wikidata_items):
         wikipedia_url = get_wikipedia_url_from_wikidata_id(wiki_id, debug=False)
         wikipedia_urls.append(wikipedia_url)
     return wikipedia_urls
+
+

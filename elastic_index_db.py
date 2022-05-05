@@ -1,9 +1,7 @@
 from __future__ import unicode_literals, division, print_function
-
 from elasticsearch import helpers
 from elastic_utils import get_elastic, check_elastic_index_names, doc_generator, get_header_names
-
-import os
+import argparse 
 import logging
 import pandas as pd
 
@@ -17,13 +15,21 @@ settings= {
         }
     }
 
-def index_database(headers, path, index_name, separator, settings=settings): 
-    names_dict = get_header_names(headers)
+def index_database(path, index_name, separator, headers=None, settings=settings): 
+    names_dict = {}
+    if headers: 
+        df = pd.read_csv(path, sep=separator, dtype='str', header=None)
+        names_dict = get_header_names(headers)
+        df = df.rename(columns=names_dict)
+    else: 
+        df = pd.read_csv(path, sep=separator, dtype='str')
+
     print(names_dict)
+    print(path)
+    print(index_name)
+    print(separator)
             
-    df = pd.read_csv(path, sep=separator, dtype='str', header=None)
     df = df.fillna('None')
-    df = df.rename(columns=names_dict)
     print(df.head())
 
     elastic = get_elastic()
@@ -45,12 +51,13 @@ def index_database(headers, path, index_name, separator, settings=settings):
     try:
         for ok, response in helpers.parallel_bulk(
                 client=elastic,
-                actions=doc_generator(df, index_name, headers),
+                actions=doc_generator(df, index_name),
                 chunk_size=1000,
                 thread_count=8,
                 queue_size=600,
                 request_timeout=30
         ):
+            print(ok, response)
             if not ok:
                 errors.append(response)
                 failed += 1
@@ -62,67 +69,18 @@ def index_database(headers, path, index_name, separator, settings=settings):
 
 
 if __name__ == "__main__":
-    separator = '\t'
-    path = os.path.join('/DATA/ezotova_data/ICD-10_CodiEsp/data/icd', 'ICD10_diagnosticos_block_2020.tsv')
-    headers = ['id', 'codigo', 'descripcion', 'block_label']
-    index_name = 'icd10cm'
+    parser = argparse.ArgumentParser(description='Index Elastic Database')
 
-    # separator = '|'
-    # path = os.path.join('database', 'SemGroups.txt')
-    # headers = ['STY', 'DEF', 'UI', 'TYPE']
-    # index_name = 'cui2semgroup'
+    parser.add_argument('--headers', nargs='+', type=str,  help='A list of headers names in the table')
+    parser.add_argument('--path', type=str, default=None, help='Type of taxonomy to map with')
+    parser.add_argument(
+        '--index_name', 
+        type=str, 
+        help='Index name in Elastic, will be used for search. All the names are given en the config.py file. You can add, delete or edit your own index names'
+        )
+    parser.add_argument('--separator', type=str, help='Separator | or tab, depending on the table to process')
 
-    # separator = '\t'
-    # path = os.path.join('database', 'query_wikidata_mesh.tsv')
-    # headers = ['item', 'itemLabel', 'itemDescription', 'code']
-    # index_name = 'mesh2wiki'
-
-    # separator = '\t'
-    # path = os.path.join('database', 'query_wikidata_identificador_de_synset_de_WordNet_3_1.tsv')
-    # headers = ['item', 'wordnet_id', 'MESH', 'CUI']
-    # index_name = 'wordnet2wiki'
-
-    # separator = '\t'
-    # path = os.path.join('database', 'sct2_Description_Full-en_INT_20210731.txt')
-    # headers = ['id', 'effectiveTime', 'active', 'moduleId', 'conceptId', 'languageCode', 'typeId', 'term', 'caseSignificanceId']
-    # index_name = 'snomed_en'
-
-    # separator = '\t'
-    # path = os.path.join('database', 'query_wikidata_cui.tsv')
-    # headers = ['item', 'itemLabel', 'itemDescription', 'code']
-    # index_name = 'cui2wiki'
-
-    # separator = '\t'
-    # path = os.path.join('/DATA/ezotova_data/ICD-10_CodiEsp/data/icd', 'ICD10_procedimientos_block_2020.tsv')
-    # headers = ['id', 'codigo', 'descripcion', 'block_label']
-    # index_name = 'icd10pcs'
-
-    # separator = '|'
-    # path = os.path.join('database', 'MRSTY.RRF')
-    # headers = ['CUI', 'TUI', 'STN', 'STY', 'ATUI', 'CVF']
-    # index_name = 'semantic_types'
-
-    # separator = '\t'
-    # path = os.path.join('database', 'sct2_Description_SpanishExtensionFull-es_INT_20211031.txt')
-    # headers = ['id', 'effectiveTime', 
-    # 	'active',  'moduleId', 'conceptId', 'languageCode', 
-    #     'typeId', 'term', 'caseSignificanceId']
-    # index_name = 'snomed_es'
-
-    # separator = '\t'
-    # path = os.path.join('database', 'tls_Icd10cmHumanReadableMap_US1000124_20210901.tsv')
-    # headers = ['id', 'effectiveTime', 'active', 
-    #     'moduleId', 'refsetId', 'referencedComponentId', 
-    #     'referencedComponentName', 'mapGroup', 'mapPriority', 'mapRule', 
-    #     'mapAdvice', 'mapTarget', 'mapTargetName', 'correlationId', 
-    #     'mapCategoryId', 'mapCategoryName']
-    # index_name = 'snomed2icd10'
-
-    # separator = '|'
-    # path = os.path.join('/DATA/ezotova_data/UMLS', 'MRCONSO.RRF')
-    # headers = ['CUI', 'LAT', 'TS', 'LUI', 'STT', 'SUI', 'ISPREF', 'AUI', 
-    #     'SAUI', 'SCUI', 'SDUI', 'SAB', 'TTY', 'CODE', 'STR', 'SRL', 
-    #     'SUPPRESS', 'CVF']
-    # index_name = 'umls'
-
-    index_database(headers, path, index_name, separator)
+    args = parser.parse_args()
+    print(args)
+    # path, index_name, separator
+    index_database(args.path, args.index_name, args.separator)
