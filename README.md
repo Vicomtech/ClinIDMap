@@ -7,7 +7,7 @@ knowledge bases.
 
 ### Requirements and Installation 
 
-1. Before starting, the following databases should be downloaded. We do not provide the databases (ontologies and taxonomies), as they depend on the licences and cannot be publicly distributed. 
+1. Before starting, the following databases should be downloaded. We do not provide the databases (ontologies and taxonomies), as they depend on the licences and cannot be publicly distributed. We share only CUI and MESH that occur in Wikipedia and Wikidata in database folder.  
 
 UMLS Metathesaurus https://www.nlm.nih.gov/research/umls/licensedcontent/umlsknowledgesources.html
 
