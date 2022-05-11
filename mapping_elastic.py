@@ -1,7 +1,6 @@
 import os
 from xmlrpc.client import boolean
 from xxlimited import Str
-import numpy as np
 import json
 import time
 import argparse

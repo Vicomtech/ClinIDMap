@@ -1,9 +1,13 @@
 # pip install sparqlwrapper
 # https://rdflib.github.io/sparqlwrapper/
 
+from distutils.command.config import config
+import os 
 import sys
 import pandas as pd 
 from SPARQLWrapper import SPARQLWrapper, JSON
+
+from config import DATABASE
 
 endpoint_url = "https://query.wikidata.org/sparql"
 
@@ -46,6 +50,10 @@ SELECT * WHERE {
 }
 """
 
+output_folder = DATABASE
+if not os.path.exists(output_folder):
+    os.makedirs(output_folder)
+
 def get_results(query, endpoint_url=endpoint_url):
     user_agent = "WDQS-example Python/%s.%s" % (sys.version_info[0], sys.version_info[1])
     # TODO adjust user agent; see https://w.wiki/CX6
@@ -74,7 +82,7 @@ def results2csv(results, code_type):
 
     df = pd.DataFrame({'item': items, 'itemLabel': itemLabels, 'itemDescription': itemDescriptions, code_type: codes})
     print('{} {} codes are in Wikidata'.format(len(df), code_type))
-    df.to_csv('database/query_wikidata_'+code_type+'.tsv', sep='\t', index=False)
+    df.to_csv(os.path.join(output_folder, code_type+'2wiki.tsv'), sep='\t', index=False)
 
 def wordnet_results2csv(results):
     items = []
@@ -95,23 +103,22 @@ def wordnet_results2csv(results):
 
     df = pd.DataFrame({'item': items, 'wordnet_id': codes, 'MESH': meshs, 'CUI': cuis })
     print('{} {} codes are in Wikidata'.format(len(df), 'identificador_de_synset_de_WordNet_3_1'))
-    df.to_csv('database/query_wikidata_identificador_de_synset_de_WordNet_3_1.tsv', sep='\t', index=False)
+    df.to_csv(os.path.join(output_folder, 'query_wikidata_identificador_de_synset_de_WordNet_3_1.tsv'), sep='\t', index=False)
 
-
-
+print('Starting CUI query')
 results_cui = get_results(query_cui)
 
+print('Starting MESH query')
 results_mesh = get_results(query_mesh)
 
+print('Starting Wordnet query')
 results_wordnet = get_results(query_wordnet)
 
 ##
 code_type = 'cui'
-
 results2csv(results_cui, code_type)
 
 code_type = 'mesh'
-
 results2csv(results_mesh, code_type)
 
 wordnet_results2csv(results_wordnet)

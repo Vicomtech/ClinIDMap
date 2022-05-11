@@ -21,14 +21,18 @@ def filterKeys(document, headers):
 
 def doc_generator(df, index_name):
     headers = list(df.columns)
+    print(headers)
     df_iter = df.iterrows()
-    # print(df_iter)
+    print(df_iter)
     for index, document in df_iter:
+        # print(index)
+        # print(document)
         yield {
                 "_index": index_name,
-                "_type": "_doc",
+                # "_type": "_doc",
                 "_id" : f"{index}",
                 "_source": filterKeys(document, headers),
+                
             }
     raise StopIteration
 

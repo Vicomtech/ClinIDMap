@@ -7,7 +7,7 @@ knowledge bases.
 
 ### Requirements and Installation 
 
-Before starting, the following databases should be downloaded. We do not provide the databases (ontologies and taxonomies), as they depend on the licences and cannot be publicly distributed. 
+1. Before starting, the following databases should be downloaded. We do not provide the databases (ontologies and taxonomies), as they depend on the licences and cannot be publicly distributed. 
 
 UMLS Metathesaurus https://www.nlm.nih.gov/research/umls/licensedcontent/umlsknowledgesources.html
 
@@ -21,7 +21,7 @@ ICD-10 CM and PCS International
 
 ICD-10 CM and PCS Spanish Version https://www.sanidad.gob.es/fr/estadEstudios/estadisticas/normalizacion/home.htm
 
-These databeses will be uploaded and indexed in Elasticseach, which should be installed on your device. 
+2. These databeses will be uploaded and indexed in Elasticseach, which should be installed on your device. Here, we install Elasticsearch as a Docker application.  
 
 ### Configuration 
 
@@ -37,13 +37,16 @@ python mapping_elastic.py <taxonomy type> <taxonomy id> --wiki
 python mapping_elastic.py <taxonomy type> <taxonomy id> --no-wiki 
 ```
 
-Update databases in Elastic Search index 
+Update databases in Elasticsearch index 
 
 ```shell script
-# get all Wikidata and Wikipedia items related to the code
-python 
-# skip Wikidata and Wikipedia 
-python 
+# update Elasticsearch indexes 
+# --headers list of headers in your table 
+# --path path to the table 
+# --index_name the name of the index in Elasticsearch which will be used for extracting codes
+# --separator it is tabulator '\t' or |  
+python elastic_index_db.py --headers item itemLabel itemDescription code --path database/cui2wiki.tsv --index_name cui2wiki --separator '\t'
+ 
 ```
 
 Update Wikidata and Wikipedia database: get all CUIs and MeSH codes which occur in Wikidata and Wikpedia  
