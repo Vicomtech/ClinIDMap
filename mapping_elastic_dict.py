@@ -5,15 +5,14 @@ import json
 import time
 import argparse
 
+import config
+
+# from search_term import search 
+
 from elastic_search import query_search, result2list_, result2list_unique, get_query, get_umls_query, get_umls2sab_query
 from elastic_utils import get_elastic
 
 from util import wikidata2wikipedia_urls
-import config
-
-
-def lists2tuples(list1, list2): 
-    return [(i, j) for i, j in zip(list1, list2)]
 
 
 start = time.time()
@@ -111,13 +110,12 @@ class ClinIDMapper:
                     for hit in icd10cm_es_result['hits']['hits']: 
                         icd10cm_descrs_es.append(hit['_source']['descripcion'])
 
-            # self.result['UMLS_CUI'] = {'ids': self.umls_cuis, 'descriptions': umls_descrs}
-            self.result['UMLS_CUI'] = (self.source_id, umls_descrs)
-            self.result['SNOMED_CT_EN'] = lists2tuples(snomed_codes_en, snomed_descrs_en)
-            self.result['SNOMED_CT_ES'] = lists2tuples(snomed_codes_es, snomed_descrs_es)
-            self.result['ICD10CM_ES'] = lists2tuples(icd10cm_codes, icd10cm_descrs_es)
-            self.result['ICD10PCS_ES'] = lists2tuples(icd10pcs_codes, icd10pcs_descrs_es)
-            self.result['ICD10PCS_ES'] = lists2tuples(icd10pcs_codes, icd10pcs_descrs_es)
+            self.result['UMLS_CUI'] = {'ids': self.umls_cuis, 'descriptions': umls_descrs}
+            self.result['SNOMED_CT_EN'] = {'ids': snomed_codes_en, 'descriptions': snomed_descrs_en}
+            self.result['SNOMED_CT_ES'] = {'ids': snomed_codes_es, 'descriptions': snomed_descrs_es }
+            self.result['ICD10CM_ES'] ={'ids': icd10cm_codes, 'descriptions': icd10cm_descrs_es}
+            self.result['ICD10PCS_ES'] ={'ids': icd10pcs_codes, 'descriptions': icd10pcs_descrs_es}
+            self.result['ICD10PCS_ES'] = {'ids': icd10pcs_codes, 'descriptions': icd10pcs_descrs_es}
 
         elif self.source_type == 'SNOMED_CT': 
             self.result['status'] = 'OK'
@@ -155,6 +153,7 @@ class ClinIDMapper:
             icd10pcs_codes = []
             icd10cm_descrs_es = []
 
+            print('PCS RESULT')
             for cui in self.umls_cuis: 
                 q_dic = get_umls_query(cui, 'ICD10PCS')
                 icd10pcs_umls_result = query_search(q_dic, self.umls)
@@ -175,11 +174,11 @@ class ClinIDMapper:
                     for hit in icd10cm_es_result['hits']['hits']: 
                         icd10cm_descrs_es.append(hit['_source']['descripcion'])
 
-            self.result['UMLS_CUI'] = lists2tuples(self.umls_cuis, umls_descrs)
-            self.result['SNOMED_CT_EN'] = lists2tuples([self.source_id], snomed_descrs_en)
-            self.result['SNOMED_CT_ES'] = lists2tuples([self.source_id], snomed_descrs_es)
-            self.result['ICD10CM_ES'] = lists2tuples(icd10cm_codes, icd10cm_descrs_es)
-            self.result['ICD10PCS_ES'] = lists2tuples(icd10pcs_codes, icd10pcs_descrs_es)
+            self.result['UMLS_CUI'] = {'ids': self.umls_cuis, 'descriptions': umls_descrs}
+            self.result['SNOMED_CT_EN'] = {'ids': [self.source_id], 'descriptions': snomed_descrs_en} 
+            self.result['SNOMED_CT_ES'] = {'ids': [self.source_id], 'descriptions': snomed_descrs_es}
+            self.result['ICD10CM_ES'] = {'ids': icd10cm_codes, 'descriptions': icd10cm_descrs_es}
+            self.result['ICD10PCS_ES'] = {'ids': icd10pcs_codes, 'descriptions': icd10pcs_descrs_es}
 
         elif self.source_type == 'ICD10CM': 
             self.result['status'] = 'OK'
@@ -187,6 +186,8 @@ class ClinIDMapper:
             q_dic = get_query("codigo", self.source_id)
             icd10cm_es_result =  query_search(q_dic, self.icd10cm)
             icd10cm_descrs_es  = result2list_(icd10cm_es_result, 'descripcion')
+
+            self.result['ICD10CM_ES'] = {'ids': [self.source_id], 'descriptions': icd10cm_descrs_es} 
 
             q_dic = get_query("mapTarget", self.source_id)
             snomed_map_result = query_search(q_dic, self.snomed2icd10)
@@ -200,7 +201,7 @@ class ClinIDMapper:
                     snomed_codes_en.append(hit['_source']['referencedComponentId'])
                     snomed_descrs_en.append(hit['_source']['referencedComponentName'])
 
-                self.result['SNOMED_CT_EN'] = lists2tuples(snomed_codes_en, snomed_descrs_en)
+                self.result['SNOMED_CT_EN'] = {'ids': snomed_codes_en, 'descriptions': snomed_descrs_en}
 
                 snomed_codes_es = []
                 snomed_descrs_es = []
@@ -213,7 +214,7 @@ class ClinIDMapper:
                             snomed_codes_es.append(hit['_source']['conceptId'])
                             snomed_descrs_es.append(hit['_source']['term']) 
 
-                self.result['SNOMED_CT_ES'] = lists2tuples(snomed_codes_es, snomed_descrs_es)
+                self.result['SNOMED_CT_ES'] = {'ids': snomed_codes_es, 'descriptions': snomed_descrs_es}
 
                 for snomed_id in list(set(snomed_codes_en)): 
                     q_dic = get_umls2sab_query(snomed_id, 'SNOMED_US') 
@@ -228,8 +229,7 @@ class ClinIDMapper:
                     self.umls_cuis.append(umls_cui)
                     umls_descrs.append(umls_descr)
 
-                self.result['ICD10CM_ES'] = lists2tuples([self.source_id], icd10cm_descrs_es) 
-                self.result['UMLS_CUI'] = lists2tuples(self.umls_cuis, umls_descrs)
+                self.result['UMLS_CUI'] = {'ids': self.umls_cuis, 'descriptions': umls_descrs}
 
             else: 
                 self.umls_cuis = []
@@ -242,7 +242,7 @@ class ClinIDMapper:
                         self.umls_cuis.append(hit['_source']['CUI'])
                         umls_descrs.append(hit['_source']['STR'])
 
-                self.result['UMLS_CUI'] = lists2tuples(self.umls_cuis, umls_descrs)
+                self.result['UMLS_CUI'] = {'ids': self.umls_cuis, 'descriptions': umls_descrs}
 
                 snomed_ids_umls = []
                 for c in list(set(self.umls_cuis)): 
@@ -271,8 +271,8 @@ class ClinIDMapper:
                             snomed_codes_en.append(hit['_source']['conceptId'])
                             snomed_descrs_en.append(hit['_source']['term']) 
                 
-                self.result['SNOMEDCT_ES'] = lists2tuples(snomed_codes_es, snomed_descrs_es)
-                self.result['SNOMEDCT_EN'] = lists2tuples(snomed_codes_en, snomed_descrs_en)
+                self.result['SNOMEDCT_ES'] = {'ids': snomed_codes_es, 'descriptions': snomed_descrs_es}
+                self.result['SNOMEDCT_EN'] = {'ids': snomed_codes_en, 'descriptions': snomed_descrs_en}
 
         elif self.source_type == 'ICD10PCS':
             self.result['status'] = 'OK'
@@ -281,7 +281,7 @@ class ClinIDMapper:
             icd10cm_es_result =  query_search(q_dic, self.icd10pcs)
             icd10cm_descrs_es  = result2list_(icd10cm_es_result, 'descripcion')
 
-            self.result['ICD10PCS_ES'] = lists2tuples([self.source_id], icd10cm_descrs_es) 
+            self.result['ICD10PCS_ES'] = {'ids': [self.source_id], 'descriptions': icd10cm_descrs_es} 
 
             q_dic = get_umls2sab_query(self.source_id, 'ICD10PCS') 
             umls_icd_result = query_search(q_dic, self.umls)
@@ -292,7 +292,7 @@ class ClinIDMapper:
                     self.umls_cuis.append(hit['_source']['CUI'])
                     umls_descrs.append(hit['_source']['STR'])
 
-            self.result['UMLS_CUI'] = lists2tuples(self.umls_cuis, umls_descrs)
+            self.result['UMLS_CUI'] = {'ids': self.umls_cuis, 'descriptions': umls_descrs}
 
             snomed_codes_en_umls = []
             for c in self.umls_cuis: 
@@ -323,11 +323,11 @@ class ClinIDMapper:
                             snomed_descrs_es.append(hit['_source']['term'])
                             snomed_codes_es.append(hit['_source']['conceptId'])
                             
-            self.result['SNOMEDCT_EN'] = lists2tuples(snomed_codes_en, snomed_descrs_en)
-            self.result['SNOMEDCT_ES'] = lists2tuples(snomed_codes_es, snomed_descrs_es)
+            self.result['SNOMEDCT_EN'] = {'ids':snomed_codes_en, 'descriptions': snomed_descrs_en}
+            self.result['SNOMEDCT_ES'] = {'ids':snomed_codes_es, 'descriptions': snomed_descrs_es}
 
         else: 
-            self.result['status'] = '{} is irrelevant Source Taxonomy Type. Must be: UMLS, SNOMED_CT, ICD10CM or ICD10PCS'.format(self.source_type)
+            self.result['status'] = '{} is irrelevant Source Taxonomy Type. Must be: UMLS, SNOMED_CT, ICD10CM or ICD10PCS'.format(source_type)
 
         if self.wiki: 
             if self.umls_cuis:

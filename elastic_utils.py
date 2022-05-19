@@ -25,8 +25,6 @@ def doc_generator(df, index_name):
     df_iter = df.iterrows()
     print(df_iter)
     for index, document in df_iter:
-        # print(index)
-        # print(document)
         yield {
                 "_index": index_name,
                 # "_type": "_doc",
