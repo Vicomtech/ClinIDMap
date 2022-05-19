@@ -13,8 +13,13 @@ import config
 
 
 def lists2tuples(list1, list2): 
-    return [(i, j) for i, j in zip(list1, list2)]
-
+    result = []
+    for i, j in zip(list1, list2): 
+        d = {}
+        d['id'] = i
+        d['description'] = j
+        result.append(d)
+    return result
 
 start = time.time()
 
@@ -91,7 +96,6 @@ class ClinIDMapper:
             icd10pcs_codes = []
             icd10cm_descrs_es = []
 
-            print('PCS RESULT')
             for cui in self.umls_cuis: 
                 q_dic = get_umls_query(cui, 'ICD10PCS')
                 icd10pcs_umls_result = query_search(q_dic, self.umls)
@@ -111,8 +115,14 @@ class ClinIDMapper:
                     for hit in icd10cm_es_result['hits']['hits']: 
                         icd10cm_descrs_es.append(hit['_source']['descripcion'])
 
-            # self.result['UMLS_CUI'] = {'ids': self.umls_cuis, 'descriptions': umls_descrs}
-            self.result['UMLS_CUI'] = (self.source_id, umls_descrs)
+            d_list = []
+            for descr in umls_descrs: 
+                d = {}
+                d['id'] = self.source_id
+                d['description'] = descr
+                d_list.append(d)
+
+            self.result['UMLS_CUI'] = d_list
             self.result['SNOMED_CT_EN'] = lists2tuples(snomed_codes_en, snomed_descrs_en)
             self.result['SNOMED_CT_ES'] = lists2tuples(snomed_codes_es, snomed_descrs_es)
             self.result['ICD10CM_ES'] = lists2tuples(icd10cm_codes, icd10cm_descrs_es)
@@ -332,9 +342,10 @@ class ClinIDMapper:
         if self.wiki: 
             if self.umls_cuis:
                 for c in list(set(self.umls_cuis)):
-                    q_dic_ = get_query('code', c)
+                    q_dic_ = get_query('cui', c)
                     wiki_result = query_search(q_dic_, 'cui2wiki')
                     wikidata_items = result2list_(wiki_result, 'item')
+                    print(wikidata_items)
                     self.result['wikidata_item_url'] = wikidata_items
                     
                     if len(wikidata_items) > 0: 
@@ -346,7 +357,7 @@ class ClinIDMapper:
                         mesh = result2list_(umls_mesh, 'CODE')
                         wikidata_items = []
                         for m in list(set(mesh)): 
-                            q_dic_m = get_query("code", m)
+                            q_dic_m = get_query("mesh", m)
                             wiki_result_m = query_search(q_dic_m, self.mesh2wiki)
                             if wiki_result_m['hits']['total']['value'] > 0:
                                 for hit in wiki_result_m['hits']['hits']: 
@@ -369,11 +380,11 @@ print("Time: {:0>2}:{:0>2}:{:05.4f}".format(int(hours),int(minutes),seconds))
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Clinical IDs mapping')
 
-    parser.add_argument('source_type', type=str, help='Type of taxonomy to map with')
+    parser.add_argument('source_type', type=str, help='Type of taxonomy to map with. Must be: UMLS, SNOMED_CT, ICD10CM or ICD10PCS')
     parser.add_argument('source_id', type=str, help='ID from the taxonomy to map')
     parser.add_argument('--wiki', action='store_true')
     parser.add_argument('--no-wiki', action='store_false')
-    parser.set_defaults(feature=True)
+    parser.set_defaults(wiki=True)
 
     args = parser.parse_args()
 
