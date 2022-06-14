@@ -21,7 +21,19 @@ ICD-10 CM and PCS International
 
 ICD-10 CM and PCS Spanish Version https://www.sanidad.gob.es/fr/estadEstudios/estadisticas/normalizacion/home.htm
 
-2. These databeses will be uploaded and indexed in Elasticseach, which should be installed on your device. Here, we install Elasticsearch as a Docker application.  
+2. These databases will be uploaded and indexed in Elasticseach, which should be installed on your device. Here, we install Elasticsearch as a Docker application.  
+
+Start Docker application:
+
+```shell script
+docker-compose up
+```
+
+Stop and delete Docker application: 
+
+```shell script
+docker-compose up
+```
 
 ### Configuration 
 
@@ -53,5 +65,5 @@ python elastic_index_db.py --headers item itemLabel itemDescription code --path 
 Update Wikidata and Wikipedia database: get all CUIs and MeSH codes which occur in Wikidata and Wikpedia  
 
 ```shell script
-python wiki_query_wrapper.py 
+python update_wiki.py 
 ```
