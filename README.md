@@ -33,6 +33,7 @@ Principal use
 ```shell script
 # get all Wikidata and Wikipedia items related to the code
 python mapping_elastic.py <taxonomy type> <taxonomy id> --wiki 
+
 # skip Wikidata and Wikipedia 
 python mapping_elastic.py <taxonomy type> <taxonomy id> --no-wiki 
 ```
@@ -50,3 +51,7 @@ python elastic_index_db.py --headers item itemLabel itemDescription code --path 
 ```
 
 Update Wikidata and Wikipedia database: get all CUIs and MeSH codes which occur in Wikidata and Wikpedia  
+
+```shell script
+python wiki_query_wrapper.py 
+```
