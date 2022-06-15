@@ -36,8 +36,10 @@ docker-compose down
 ```
 
 When the Elasticsearch API is up, we should update databases in Elasticsearch index 
+
 We pass all the CSV tables to the API. To process them correctly, the following arguments should be provided. 
 Tables must be \t or | separated 
+
 The list of index names is hardcoded in config.py, you can provide your own names.
 
 ```shell script
