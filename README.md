@@ -32,25 +32,13 @@ docker-compose up
 Stop and delete Docker application: 
 
 ```shell script
-docker-compose up
+docker-compose down
 ```
 
-### Configuration 
-
-
-### CLI use 
-
-Principal use 
-
-```shell script
-# get all Wikidata and Wikipedia items related to the code
-python mapping_elastic.py <taxonomy type> <taxonomy id> --wiki 
-
-# skip Wikidata and Wikipedia 
-python mapping_elastic.py <taxonomy type> <taxonomy id> --no-wiki 
-```
-
-Update databases in Elasticsearch index 
+When the Elasticsearch API is up, we should update databases in Elasticsearch index 
+We pass all the CSV tables to the API. To process them correctly, the following arguments should be provided. 
+Tables must be \t or | separated 
+The list of index names is hardcoded in config.py, you can provide your own names.
 
 ```shell script
 # update Elasticsearch indexes 
@@ -67,3 +55,18 @@ Update Wikidata and Wikipedia database: get all CUIs and MeSH codes which occur 
 ```shell script
 python update_wiki.py 
 ```
+### Configuration 
+
+
+### CLI use 
+
+Principal use 
+
+```shell script
+# get all Wikidata and Wikipedia items related to the code
+python mapping.py <taxonomy type> <taxonomy id> --wiki 
+
+# skip Wikidata and Wikipedia 
+python mapping.py <taxonomy type> <taxonomy id> --no-wiki 
+```
+
