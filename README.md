@@ -72,3 +72,12 @@ python mapping.py <taxonomy type> <taxonomy id> --wiki
 python mapping.py <taxonomy type> <taxonomy id> --no-wiki 
 ```
 
+### Citing 
+
+@inproceedings{zotova2022lrec,
+  title={ClinIDMap: Clinical IDs Mapping for Data Interoperability},
+  author={Zotova, Elena and Cuadros, Montse and Rigau, German},
+  booktitle = {{LREC} 2022, 13th International Conference on  Language Resources (LRs) and Evaluation for Language Technologies (LT)},
+  pages     = {},
+  year      = {2022}
+}
