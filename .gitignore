@@ -4,5 +4,4 @@
 *.pyc
 *.log
 .idea
-*.json
 _*.*
