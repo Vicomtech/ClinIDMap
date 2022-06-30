@@ -74,6 +74,7 @@ python mapping.py <taxonomy type> <taxonomy id> --no-wiki
 
 ### Citing 
 
+```
 @inproceedings{zotova2022lrec,
   title={ClinIDMap: Clinical IDs Mapping for Data Interoperability},
   author={Zotova, Elena and Cuadros, Montse and Rigau, German},
@@ -81,3 +82,4 @@ python mapping.py <taxonomy type> <taxonomy id> --no-wiki
   pages     = {},
   year      = {2022}
 }
+```
