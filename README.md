@@ -15,9 +15,9 @@ SNOMED-CT 2 ICD-10 Map https://www.nlm.nih.gov/research/umls/mapping_projects/sn
 
 SNOMED-CT International Edition https://www.nlm.nih.gov/healthit/snomedct/international.html 
 
-SNOMED_CT Spanish Edition https://www.nlm.nih.gov/healthit/snomedct/international.html
+SNOMED_CT Spanish Edition https://snomed-ct.sanidad.gob.es/snomed-ct/descarga/listadoDocumentos.do
 
-ICD-10 CM and PCS International
+ICD-10 CM and PCS International https://www.cms.gov/medicare/icd-10/2022-icd-10-cm https://www.cms.gov/medicare/icd-10/2022-icd-10-pcs
 
 ICD-10 CM and PCS Spanish Version https://www.sanidad.gob.es/fr/estadEstudios/estadisticas/normalizacion/home.htm
 
@@ -49,7 +49,6 @@ The list of index names is hardcoded in config.py, you can provide your own name
 # --index_name the name of the index in Elasticsearch which will be used for extracting codes
 # --separator it is tabulator '\t' or |  
 python elastic_index_db.py --headers item itemLabel itemDescription code --path database/cui2wiki.tsv --index_name cui2wiki --separator '\t'
- 
 ```
 
 Update Wikidata and Wikipedia database: get all CUIs and MeSH codes which occur in Wikidata and Wikpedia  
