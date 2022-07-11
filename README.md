@@ -46,7 +46,7 @@ The list of index names is hardcoded in config.py, you can provide your own name
 # update Elasticsearch indexes 
 # --headers list of headers in your table 
 # --path path to the table 
-# --index_name the name of the index in Elasticsearch which will be used for extracting codes
+# --index_name the name of the index in Elasticsearch which will be used for extracting codes. Hardcoded index names are given in the config.py file but you can provide your own names 
 # --separator it is tabulator '\t' or |  
 python elastic_index_db.py --headers item itemLabel itemDescription code --path database/cui2wiki.tsv --index_name cui2wiki --separator '\t'
 ```
