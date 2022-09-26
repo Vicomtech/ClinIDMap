@@ -47,6 +47,24 @@ SELECT * WHERE {
   OPTIONAL { ?item wdt:P8814 ?identificador_de_synset_de_WordNet_3_1. }
   OPTIONAL { ?item wdt:P2892 ?UMLS_CUI. }
   OPTIONAL { ?item wdt:P486 ?identificador_MeSH. }
+  OPTIONAL { ?item wdt:P494 ?ICD_10. }
+  OPTIONAL { ?item wdt:P5806 ?Snomed_CT. }
+}
+"""
+
+query_wordnet0 = """PREFIX bd: <http://www.bigdata.com/rdf#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX schema: <http://schema.org/>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+
+SELECT ?item ?itemLabel ?identificador_de_synset_de_WordNet_3_1 ?UMLS_CUI ?identificador_MeSH ?ICD_10 ?Snomed_CT WHERE {
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+  OPTIONAL { ?item wdt:P8814 ?identificador_de_synset_de_WordNet_3_1. }
+  OPTIONAL { ?item wdt:P2892 ?UMLS_CUI. }
+  OPTIONAL { ?item wdt:P486 ?identificador_MeSH. }
+  OPTIONAL { ?item wdt:P494 ?ICD_10. }
+  OPTIONAL { ?item wdt:P5806 ?Snomed_CT. }
 }
 """
 
@@ -84,11 +102,14 @@ def results2csv(results, code_type):
     print('{} {} codes are in Wikidata'.format(len(df), code_type))
     df.to_csv(os.path.join(output_folder, code_type+'2wiki.tsv'), sep='\t', index=False)
 
-def wordnet_results2csv(results):
+def wordnet_results2csv(results, filename):
     items = []
     codes = []
     meshs = []
     cuis = []
+    icds = []
+    snomeds = []
+    itemlabels = []
     for result in results["results"]["bindings"]:
         items.append(result['item']['value'])
         codes.append(result['identificador_de_synset_de_WordNet_3_1']['value'])
@@ -100,10 +121,22 @@ def wordnet_results2csv(results):
             cuis.append(result['UMLS_CUI']['value'])
         else: 
             cuis.append('')
+        if 'ICD_10' in result: 
+            icds.append(result['ICD_10']['value'])
+        else: 
+            icds.append('')
+        if 'Snomed_CT' in result: 
+            snomeds.append(result['Snomed_CT']['value'])
+        else: 
+            snomeds.append('')
+        if 'itemLabel' in result: 
+            itemlabels.append(result['itemLabel']['value'])
+        else: 
+            itemlabels.append('')
 
-    df = pd.DataFrame({'item': items, 'wordnet_id': codes, 'MESH': meshs, 'CUI': cuis })
+    df = pd.DataFrame({'item': items, 'itemLabel': itemlabels, 'wordnet_id': codes, 'MESH': meshs, 'CUI': cuis, 'ICD-10': icds, 'SNOMED-CT': snomeds})
     print('{} {} codes are in Wikidata'.format(len(df), 'identificador_de_synset_de_WordNet_3_1'))
-    df.to_csv(os.path.join(output_folder, 'query_wikidata_identificador_de_synset_de_WordNet_3_1.tsv'), sep='\t', index=False)
+    df.to_csv(os.path.join(output_folder, filename), sep='\t', index=False)
 
 print('Starting CUI query')
 results_cui = get_results(query_cui)
@@ -112,8 +145,9 @@ print('Starting MESH query')
 results_mesh = get_results(query_mesh)
 
 print('Starting Wordnet query')
-results_wordnet = get_results(query_wordnet)
+results_wordnet = get_results(query_wordnet0)
 
+print(results_wordnet)
 ##
 code_type = 'cui'
 results2csv(results_cui, code_type)
@@ -121,4 +155,27 @@ results2csv(results_cui, code_type)
 code_type = 'mesh'
 results2csv(results_mesh, code_type)
 
-wordnet_results2csv(results_wordnet)
+filename = 'query_wikidata_identificador_de_synset_de_WordNet_3_1.tsv'
+wordnet_results2csv(results_wordnet, filename)
+
+df_wordnet = pd.read_csv(os.path.join(output_folder, filename), sep='\t')
+df_wordnet = df_wordnet.fillna('')
+print(df_wordnet.head(30))
+
+# print('WordNet')
+# print(df_wordnet.wordnet_id.value_counts())
+# print('MESH')
+# print(df_wordnet.MESH.value_counts())
+# print('CUI')
+# print(df_wordnet.CUI.value_counts())
+# print('ICD-10')
+# print(df_wordnet['ICD-10'].value_counts())
+# print('SNOMED') 
+# print(df_wordnet['SNOMED-CT'].value_counts())
+
+print('Total items with WortNet 3.1', len(df_wordnet))
+
+columns = ['MESH', 'CUI', 'ICD-10', 'SNOMED-CT']
+for col in columns: 
+    wn_count = df_wordnet[df_wordnet[col] != '']
+    print(col, len(wn_count))
