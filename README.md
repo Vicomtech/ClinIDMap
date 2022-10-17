@@ -48,7 +48,10 @@ The list of index names is hardcoded in config.py, you can provide your own name
 # --path path to the table 
 # --index_name the name of the index in Elasticsearch which will be used for extracting codes. Hardcoded index names are given in the config.py file but you can provide your own names 
 # --separator it is tabulator '\t' or |  
-python elastic_index_db.py --headers item itemLabel itemDescription code --path database/cui2wiki.tsv --index_name cui2wiki --separator '\t'
+python elastic_index_db.py \\
+--headers item itemLabel itemDescription code \\
+--path database/cui2wiki.tsv \\
+--index_name cui2wiki --separator '\t'
 ```
 
 Update Wikidata and Wikipedia database: get all CUIs and MeSH codes which occur in Wikidata and Wikpedia  
@@ -71,6 +74,11 @@ python mapping.py <taxonomy type> <taxonomy id> --wiki
 python mapping.py <taxonomy type> <taxonomy id> --no-wiki 
 ```
 
+### Elastic commans 
+
+curl 'localhost:9200/_cat/indices?v'
+
+
 ### Citing 
 
 ```
@@ -78,7 +86,7 @@ python mapping.py <taxonomy type> <taxonomy id> --no-wiki
   title={ClinIDMap: Clinical IDs Mapping for Data Interoperability},
   author={Zotova, Elena and Cuadros, Montse and Rigau, German},
   booktitle = {{LREC} 2022, 13th International Conference on  Language Resources (LRs) and Evaluation for Language Technologies (LT)},
-  pages     = {},
+  pages     = {3661--3669},
   year      = {2022}
 }
 ```
