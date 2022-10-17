@@ -147,7 +147,7 @@ results_mesh = get_results(query_mesh)
 print('Starting Wordnet query')
 results_wordnet = get_results(query_wordnet0)
 
-print(results_wordnet)
+# print(results_wordnet)
 ##
 code_type = 'cui'
 results2csv(results_cui, code_type)
@@ -161,17 +161,6 @@ wordnet_results2csv(results_wordnet, filename)
 df_wordnet = pd.read_csv(os.path.join(output_folder, filename), sep='\t')
 df_wordnet = df_wordnet.fillna('')
 print(df_wordnet.head(30))
-
-# print('WordNet')
-# print(df_wordnet.wordnet_id.value_counts())
-# print('MESH')
-# print(df_wordnet.MESH.value_counts())
-# print('CUI')
-# print(df_wordnet.CUI.value_counts())
-# print('ICD-10')
-# print(df_wordnet['ICD-10'].value_counts())
-# print('SNOMED') 
-# print(df_wordnet['SNOMED-CT'].value_counts())
 
 print('Total items with WortNet 3.1', len(df_wordnet))
 
