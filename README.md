@@ -2,7 +2,7 @@
 
 **ClinIDMap**  is a tool for mapping identifiers (ID, codes) between clinical ontologies and lexical resources.
 
-ClinIDMap interlinks identifiers from UMLS, SMOMED-CT, ICD-10, the corresponding Wikipedia articles for concepts from the UMLS Metathesaurus and WordNet synsets. It's main goal is to provide semantic interoperability across the clinical concepts from various knowledge bases. 
+ClinIDMap interlinks identifiers from UMLS, SMOMED-CT, ICD-10, the corresponding Wikipedia articles and WordNet synsets. It's main goal is to provide semantic interoperability across the clinical concepts from various knowledge bases. 
 
 ### Requirements and Installation 
 
