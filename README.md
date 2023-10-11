@@ -1,4 +1,4 @@
-## Clin ID Map
+## ClinIDMap
 
 **ClinIDMap**  is a tool for mapping identifiers (ID, codes) between clinical ontologies and lexical resources.
 
@@ -10,7 +10,44 @@ uvicorn clinidmap.web.main:create_app --host 0.0.0.0 --port 5858 --reload
 
 ### CLI 
 
+To update the Wikidata codes
+
+```shell script
 python -m clinidmap.wiki.update_wiki
+```
+
+### Application 
+
+The API has three methods
+
+1) clinidmap/{index_name} Post Index - method for database indexing 
+
+Input format contains the source ID we want to map, the type of the taxonomy and the flag if we need to get the infromation about this ID from Wikipedia and WordNet. 
+
+The source type must me UMLS, SNOMED_CT, ICD10CM or ICD10PCS. 
+
+```shell script
+{
+  "source_id": "C0020587",
+  "source_type": "UMLS",
+  "wiki": false
+}
+```
+
+2) clinidmap/{index_name} Delete Index - method for index deleting 
+
+```shell script
+{
+  "path": "string",
+  "headers": [
+    "string"
+  ],
+  "separator": "string"
+}
+```
+
+3) clinidmap/map Get Item Mapping - the main method for code mapping
+
 
 
 ### Requirements and Installation 
@@ -50,23 +87,12 @@ Tables must be \t or | separated
 
 The list of index names is hardcoded in config.py, you can provide your own names.
 
-```shell script
-# update Elasticsearch indexes 
-# --headers list of headers in your table 
-# --path path to the table 
-# --index_name the name of the index in Elasticsearch which will be used for extracting codes. Hardcoded index names are given in the config.py file but you can provide your own names 
-# --separator it is tabulator '\t' or |  
-python elastic_index_db.py \\
---headers item itemLabel itemDescription code \\
---path database/cui2wiki.tsv \\
---index_name cui2wiki --separator '\t'
-```
-
 Update Wikidata and Wikipedia database: get all CUIs and MeSH codes which occur in Wikidata and Wikpedia  
 
 ```shell script
-python update_wiki.py 
+python -m clinidmap.wiki_wordnet.update_wiki
 ```
+
 ### Configuration 
 
 
