@@ -4,6 +4,15 @@
 
 ClinIDMap interlinks identifiers from UMLS, SMOMED-CT, ICD-10, the corresponding Wikipedia articles and WordNet synsets. It's main goal is to provide semantic interoperability across the clinical concepts from various knowledge bases. 
 
+
+uvicorn clinidmap.web.main:create_app --host 0.0.0.0 --port 5858 --reload
+
+
+### CLI 
+
+python -m clinidmap.wiki.update_wiki
+
+
 ### Requirements and Installation 
 
 1. Before starting, the following databases should be downloaded. We do not provide the databases (ontologies and taxonomies), as they depend on the licences and cannot be publicly distributed. We share only CUI and MESH that occur in Wikipedia and Wikidata in database folder.  
@@ -73,13 +82,15 @@ python mapping.py <taxonomy type> <taxonomy id> --wiki
 python mapping.py <taxonomy type> <taxonomy id> --no-wiki 
 ```
 
-### Elastic commans 
+### Elastic commands 
 
 curl 'localhost:9200/_cat/indices?v'
 
+curl -XDELETE 'http://localhost:9500/umls'
+
+
 
 ### Citing 
-
 ```
 @inproceedings{zotova2022lrec,
   title={ClinIDMap: Clinical IDs Mapping for Data Interoperability},
@@ -89,3 +100,19 @@ curl 'localhost:9200/_cat/indices?v'
   year      = {2022}
 }
 ```
+###
+
+to try 
+
+% UMLS
+C0011860 - diabetes tipo 2
+C0025519 - metabolsm 
+
+% SNOMED_CT
+19997007 - hipnosis
+
+% ICD10CM
+H35.35 - Cystoid macular degeneration
+
+
+
