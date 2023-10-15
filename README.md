@@ -16,7 +16,7 @@ To update the Wikidata codes
 python -m application.wiki.update_wiki
 ```
 
-### Application 
+### API use 
 
 The API has three methods
 
