@@ -123,15 +123,3 @@ C0025519 - metabolsm
 
 % ICD10CM
 H35.35 - Cystoid macular degeneration
-
-### Citing 
-
-```
-@inproceedings{zotova2022lrec,
-  title={ClinIDMap: Clinical IDs Mapping for Data Interoperability},
-  author={Zotova, Elena and Cuadros, Montse and Rigau, German},
-  booktitle = {{LREC} 2022, 13th International Conference on  Language Resources (LRs) and Evaluation for Language Technologies (LT)},
-  pages     = {3661--3669},
-  year      = {2022}
-}
-```
