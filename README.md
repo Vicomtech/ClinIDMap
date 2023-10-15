@@ -38,6 +38,7 @@ The source type must me UMLS, SNOMED_CT, ICD10CM or ICD10PCS.
 
 ```shell script
 {
+  "index_name": "string"
   "path": "string",
   "headers": [
     "string"
@@ -48,7 +49,11 @@ The source type must me UMLS, SNOMED_CT, ICD10CM or ICD10PCS.
 
 3) clinidmap/map Get Item Mapping - the main method for code mapping
 
-
+```shell script
+{
+  "index_name": "string"
+}
+```
 
 ### Requirements and Installation 
 
@@ -93,20 +98,10 @@ Update Wikidata and Wikipedia database: get all CUIs and MeSH codes which occur 
 python -m clinidmap.wiki_wordnet.update_wiki
 ```
 
-### Configuration 
 
+### TODO
 
-### CLI use 
-
-Principal use 
-
-```shell script
-# get all Wikidata and Wikipedia items related to the code
-python mapping.py <taxonomy type> <taxonomy id> --wiki 
-
-# skip Wikidata and Wikipedia 
-python mapping.py <taxonomy type> <taxonomy id> --no-wiki 
-```
+CLI for batch processing
 
 ### Elastic commands 
 
@@ -116,19 +111,8 @@ curl -XDELETE 'http://localhost:9500/umls'
 
 
 
-### Citing 
-```
-@inproceedings{zotova2022lrec,
-  title={ClinIDMap: Clinical IDs Mapping for Data Interoperability},
-  author={Zotova, Elena and Cuadros, Montse and Rigau, German},
-  booktitle = {{LREC} 2022, 13th International Conference on  Language Resources (LRs) and Evaluation for Language Technologies (LT)},
-  pages     = {3661--3669},
-  year      = {2022}
-}
-```
-###
+#### Examples 
 
-to try 
 
 % UMLS
 C0011860 - diabetes tipo 2
@@ -140,5 +124,14 @@ C0025519 - metabolsm
 % ICD10CM
 H35.35 - Cystoid macular degeneration
 
+### Citing 
 
-
+```
+@inproceedings{zotova2022lrec,
+  title={ClinIDMap: Clinical IDs Mapping for Data Interoperability},
+  author={Zotova, Elena and Cuadros, Montse and Rigau, German},
+  booktitle = {{LREC} 2022, 13th International Conference on  Language Resources (LRs) and Evaluation for Language Technologies (LT)},
+  pages     = {3661--3669},
+  year      = {2022}
+}
+```

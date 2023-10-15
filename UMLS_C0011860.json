@@ -1,0 +1,90 @@
+{
+    "status": "OK",
+    "UMLS_CUI": [
+        {
+            "id": "C0011860",
+            "description": "Non-insulin dependent diabetes mellitus"
+        },
+        {
+            "id": "C0011860",
+            "description": "Non-insulin-dependent diabetes mellitus"
+        },
+        {
+            "id": "C0011860",
+            "description": "Diabetes mellitus -adult onset"
+        },
+        {
+            "id": "C0011860",
+            "description": "Diabetes mellitus - adult onset"
+        },
+        {
+            "id": "C0011860",
+            "description": "Type 2 diabetes mellitus"
+        },
+        {
+            "id": "C0011860",
+            "description": "Diabetes mellitus type 2"
+        },
+        {
+            "id": "C0011860",
+            "description": "Type II diabetes mellitus"
+        }
+    ],
+    "SNOMED_CT_EN": [
+        {
+            "id": "44054006",
+            "description": "Diabetes mellitus type II Non-insulin dependent diabetes mellitus NCDMM Type 2 diabetes mellitus NIDDM Diabetes mellitus type 2"
+        },
+        {
+            "id": "267468009",
+            "description": "Diabetes mellitus: [adult onset] or [noninsulin dependent] Noninsulin dependent diab.mell Non-insulin dependent diabetes mellitus Diabetes mellitus -adult onset"
+        },
+        {
+            "id": "190323008",
+            "description": "Non-insulin dependent diabetes mellitus Diabetes mellitus, adult onset, with no mention of complication Maturity onset diabetes mellitus Maturity onset diabetes Diabetes mellitus: [adult onset, with no mention of complication] or [maturity onset] or [non-insulin dependent]"
+        },
+        {
+            "id": "190384004",
+            "description": "Type II diabetes mellitus Type II diabetes mellitus (disorder)"
+        }
+    ],
+    "SNOMED_CT_ES": [
+        {
+            "id": "44054006",
+            "description": "diabetes mellitus no dependiente de insulina"
+        },
+        {
+            "id": "44054006",
+            "description": "diabetes mellitus no dependiente de insulina"
+        },
+        {
+            "id": "44054006",
+            "description": "diabetes mellitus tipo II"
+        },
+        {
+            "id": "44054006",
+            "description": "diabetes mellitus no insulino - dependiente"
+        },
+        {
+            "id": "44054006",
+            "description": "diabetes mellitus no insulino - dependiente"
+        },
+        {
+            "id": "44054006",
+            "description": "diabetes mellitus no dependiente de insulina (trastorno)"
+        },
+        {
+            "id": "44054006",
+            "description": "diabetes mellitus no dependiente de insulina (trastorno)"
+        }
+    ],
+    "ICD10CM_ES": [
+        {
+            "id": "E11.9",
+            "description": "Diabetes mellitus tipo 2 sin complicaciones"
+        }
+    ],
+    "ICD10PCS_ES": [],
+    "wikidata_item_url": [],
+    "wikipedia_article_url": []
+}

@@ -1,6 +1,9 @@
 **/venv_clinidmap
 **/logs 
 **/.vscode
+**/experiments
+**/database
+**/corpus
 *.pyc
 *.log
 .idea
