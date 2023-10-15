@@ -1,10 +1,10 @@
 import pandas as pd 
 import os 
-from clinidmap.constants import DATABASE
+from application.constants import DATABASE
 
 
-wn30_dir = '/DATA/ezotova_data/_ClinIDMap/wordnet30'
-wn31_dir = '/DATA/ezotova_data/_ClinIDMap/wordnet31'
+wn30_dir = '/DATA/wordnet30'
+wn31_dir = '/DATA/wordnet31'
 
 index_sense30 = os.path.join(wn30_dir, 'index.sense')
 index_sense31 = os.path.join(wn31_dir, 'index.sense')

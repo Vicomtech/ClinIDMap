@@ -4,15 +4,15 @@ from http import HTTPStatus
 
 from fastapi import APIRouter, HTTPException, Depends
 
-from clinidmap.errors import ElasticsearchIsNotAvailable, EmptyDatasetError
-from clinidmap.web.models import (
+from application.errors import ElasticsearchIsNotAvailable, EmptyDatasetError
+from application.web.models import (
     IndexResponseModel, IndexExpectModel, MappingExpectModel, MappingResponseModel
     # RetrieveResponseModel, 
     # RetrieveExpectModel, MatchExpectModel, MatchResponseModel, 
     # MatchSemanticResponseModel, MatchSemanticExpectModel
     )
 
-from clinidmap.web.services import (
+from application.web.services import (
     index_database_service, delete_elastic_index, get_mapping
     # search_index, neural_extractor, 
     # exact_match_search_index, delete_elastic_index, match_semantic_search_index
@@ -23,8 +23,8 @@ logger = logging.getLogger(__name__)
 
 
 api = APIRouter(
-    prefix='/clinidmap',
-    tags=['Clinical ID mapping'],
+    prefix='/idmap',
+    tags=['Medical ID mapping'],
     responses={
         ElasticsearchIsNotAvailable.error_code: {'description': ElasticsearchIsNotAvailable.error_name}
     }

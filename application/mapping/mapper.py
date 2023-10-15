@@ -1,17 +1,17 @@
 import time
 
-from clinidmap.mapping.elastic_search import query_search, result2list_, result2list_unique, get_query, get_umls_query
-from clinidmap.mapping.mapping_logic import map_source_umls, map_source_snomedct, map_source_icd10cm, map_source_icd10pcs, cui2sty
-from clinidmap.mapping.util import wikidata2wikipedia_urls
+from application.mapping.elastic_search import query_search, result2list_, result2list_unique, get_query, get_umls_query
+from application.mapping.mapping_logic import map_source_umls, map_source_snomedct, map_source_icd10cm, map_source_icd10pcs, cui2sty
+from application.mapping.util import wikidata2wikipedia_urls
 
-import clinidmap.constants as constants
+import application.constants as constants
 
 def flatten(l):
     return [item for sublist in l for item in sublist]
 
 
 
-class ClinIDMapper: 
+class IDMapper: 
     def __init__(self):
         self.umls_cuis = None 
         
@@ -108,7 +108,7 @@ class ClinIDMapper:
 
 
 # if __name__ == "__main__":
-#     # parser = argparse.ArgumentParser(description='Clinical IDs mapping')
+#     # parser = argparse.ArgumentParser(description='Medical IDs mapping')
 
 #     # parser.add_argument('source_type', type=str, help='Type of taxonomy to map with. Must be: UMLS, SNOMED_CT, ICD10CM or ICD10PCS')
 #     # parser.add_argument('source_id', type=str, help='ID from the taxonomy to map')
@@ -138,88 +138,4 @@ class ClinIDMapper:
 #     # source_id = 'GZFZZZZ'
 #     # source_type = 'ICD10PCS'
 #     # print('Source type to map:', source_type)
-
-
-#     # DATA
-#     df = pd.read_csv('/DATA/ezotova_data/MedProcNER/medprocner_train/tsv/medprocner_tsv_train_subtask2.tsv', sep='\t', dtype='str')
-#     print(df.head())
-#     print(df.describe())
-#     print(df.code.value_counts())
-
-#     text_files_folder = os.path.join('/DATA/ezotova_data/MedProcNER/medprocner_train', 'txt') 
-#     dev_files_file = '/DATA/ezotova_data/MedProcNER/medprocner_train/dev_filenames.txt'
-
-#     with open(dev_files_file) as file:
-#         dev_filenames = [line.rstrip() for line in file]
-
-#     part = 'dev'
-
-#     df_dev = pd.DataFrame([])
-
-#     if part == 'dev': 
-#         df_dev = df[df['filename'].isin(dev_filenames)]
-#     elif part == 'train': 
-#         df_dev = df[~df['filename'].isin(dev_filenames)]
-
-#     df_dev = df_dev.drop_duplicates(subset=['text', 'code'], keep='first')
-#     df_dev = df_dev
-#     print(len(df_dev))
-
-#     mapper = ClinIDMapper()
-
-#     words_all = []
-#     synonyms_all = []
-#     codes_all = []
-#     composite = []
-
-#     for i, row in tqdm.tqdm(df_dev.iterrows()): 
-
-#         code = row['code']
-#         text = row['text']
-#         umls_syns = []
-
-#         result_dict = mapper.map(code, source_type, wiki=True)
-#         if '+' in code: 
-#             print(result_dict)
-#             composite.append(result_dict)
-
-
-#         if len(result_dict['UMLS_CUI']) > 0: 
-#             for s in result_dict['UMLS_CUI']: 
-#                 umls_syns.append(s['description'])
-
-#         if len(result_dict['ICD10PCS_ES']) > 0: 
-#             for p in result_dict['ICD10PCS_ES']:
-#                 umls_syns.append(p['description'])
-
-#         if len(result_dict['ICD10CM_ES']) > 0: 
-#             for d in result_dict['ICD10CM_ES']: 
-#                 umls_syns.append(d['description'])
-
-#         words = [text for i in range(len(umls_syns))]
-#         codes = [code for i in range(len(umls_syns))]
-
-#         # print(umls_syns)
-#         words_all.append(words)
-#         synonyms_all.append(umls_syns)
-#         codes_all.append(codes)
-
-#     df_res = pd.DataFrame({'code': flatten(codes_all), 'source': flatten(words_all), 'target': flatten(synonyms_all)})
-#     df_res.to_csv('umls_synonyms_dev.tsv', sep='\t', index=False)
-
-#     print('TOTAL COMPOSITE CODES', len(composite))
-
-
-
-    
-
-
-
-
-
-    # with open(source_type+'_'+source_id+'.json', 'w', encoding='utf-8') as f:
-    #     json.dump(result_dict, f, ensure_ascii=False, indent=4)
-
-
-
 

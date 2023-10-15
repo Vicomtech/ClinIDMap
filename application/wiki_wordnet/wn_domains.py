@@ -1,7 +1,7 @@
 import pandas as pd 
 import os
 from os import walk
-from clinidmap.constants import DATABASE
+from application.constants import DATABASE
 
 
 df_wikidata_wn = pd.read_csv(os.path.join(DATABASE, 'query_wikidata_identificador_de_synset_de_WordNet_3_1_wn_3_0.tsv'), sep='\t', dtype='str')

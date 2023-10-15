@@ -10,8 +10,8 @@ from functools import reduce
 import pandas as pd 
 from SPARQLWrapper import SPARQLWrapper, JSON
 
-from clinidmap.constants import DATABASE
-from clinidmap.wiki_wordnet.wn_mapping import wn_sense_mapping
+from application.constants import DATABASE
+from application.wiki_wordnet.wn_mapping import wn_sense_mapping
 
 # ?itemLabel ?itemDescription 
 

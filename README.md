@@ -1,11 +1,11 @@
-## ClinIDMap
+## APPLICATION
 
-**ClinIDMap**  is a tool for mapping identifiers (ID, codes) between clinical ontologies and lexical resources.
+**Mapping**  is a tool for mapping identifiers (ID, codes) between clinical ontologies and lexical resources.
 
-ClinIDMap interlinks identifiers from UMLS, SMOMED-CT, ICD-10, the corresponding Wikipedia articles and WordNet synsets. It's main goal is to provide semantic interoperability across the clinical concepts from various knowledge bases. 
+The tool interlinks identifiers from UMLS, SMOMED-CT, ICD-10, the corresponding Wikipedia articles and WordNet synsets. It's main goal is to provide semantic interoperability across the clinical concepts from various knowledge bases. 
 
 
-uvicorn clinidmap.web.main:create_app --host 0.0.0.0 --port 5858 --reload
+uvicorn application.web.main:create_app --host 0.0.0.0 --port 5858 --reload
 
 
 ### CLI 
@@ -13,14 +13,14 @@ uvicorn clinidmap.web.main:create_app --host 0.0.0.0 --port 5858 --reload
 To update the Wikidata codes
 
 ```shell script
-python -m clinidmap.wiki.update_wiki
+python -m application.wiki.update_wiki
 ```
 
 ### Application 
 
 The API has three methods
 
-1) clinidmap/{index_name} Post Index - method for database indexing 
+1) application/{index_name} Post Index - method for database indexing 
 
 Input format contains the source ID we want to map, the type of the taxonomy and the flag if we need to get the infromation about this ID from Wikipedia and WordNet. 
 
@@ -34,7 +34,7 @@ The source type must me UMLS, SNOMED_CT, ICD10CM or ICD10PCS.
 }
 ```
 
-2) clinidmap/{index_name} Delete Index - method for index deleting 
+2) idmap/{index_name} Delete Index - method for index deleting 
 
 ```shell script
 {
@@ -47,7 +47,7 @@ The source type must me UMLS, SNOMED_CT, ICD10CM or ICD10PCS.
 }
 ```
 
-3) clinidmap/map Get Item Mapping - the main method for code mapping
+3) idmap/map Get Item Mapping - the main method for code mapping
 
 ```shell script
 {
@@ -95,7 +95,7 @@ The list of index names is hardcoded in config.py, you can provide your own name
 Update Wikidata and Wikipedia database: get all CUIs and MeSH codes which occur in Wikidata and Wikpedia  
 
 ```shell script
-python -m clinidmap.wiki_wordnet.update_wiki
+python -m application.wiki_wordnet.update_wiki
 ```
 
 

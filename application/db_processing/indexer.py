@@ -1,7 +1,7 @@
 from __future__ import unicode_literals, division, print_function
 
 from elasticsearch import helpers
-from clinidmap.db_processing.elastic_utils import get_elastic, check_elastic_index_names, doc_generator
+from application.db_processing.elastic_utils import get_elastic, check_elastic_index_names, doc_generator
 import logging
 
 logger = logging.getLogger(__name__)

@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 import pandas as pd
 
-from clinidmap.config import settings
+from application.config import settings
 
 from elasticsearch import Elasticsearch
 

@@ -1,10 +1,10 @@
 import pandas as pd
 
-from clinidmap.mapping.elastic_search import query_search, result2list_, result2list_unique, get_query, get_umls_query, get_umls2sab_query
-from clinidmap.db_processing.elastic_utils import get_elastic
-from clinidmap.mapping.util import lists2tuples
+from application.mapping.elastic_search import query_search, result2list_, result2list_unique, get_query, get_umls_query, get_umls2sab_query
+from application.db_processing.elastic_utils import get_elastic
+from application.mapping.util import lists2tuples
 
-from clinidmap import constants
+from application import constants
 
 
 def icd10_in_umls(umls_cuis, icd10_type): 

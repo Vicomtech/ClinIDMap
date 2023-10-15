@@ -1,9 +1,9 @@
 import os 
-from clinidmap import constants
+from application import constants
 
-from clinidmap.db_processing.indexer import ElasticIndexer
-from clinidmap.db_processing.elastic_utils import load_table, get_elastic
-from clinidmap.mapping.mapper import ClinIDMapper
+from application.db_processing.indexer import ElasticIndexer
+from application.db_processing.elastic_utils import load_table, get_elastic
+from application.mapping.mapper import IDMapper
 
 
 indexer = ElasticIndexer()
@@ -21,7 +21,7 @@ def delete_elastic_index(index_name: str):
     print(response)
     return response
 
-mapper = ClinIDMapper()
+mapper = IDMapper()
 
 def get_mapping(source_id, source_type, wiki):
     result_dict = mapper.map(source_id, source_type, wiki)

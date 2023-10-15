@@ -1,12 +1,12 @@
 import pandas as pd 
 import os
 import tqdm
-from clinidmap.constants import DATABASE
+from application.constants import DATABASE
 # pd.options.display.float_format = '{:,.4f}'.format
 
 df_wikidata = pd.read_csv(os.path.join(DATABASE, 'final_cui2mesh2icd102wn.tsv'), sep='\t', dtype='str')
 df_wikidata = df_wikidata
-df_domains = pd.read_csv('/DATA/ezotova_data/_ClinIDMap/_wn30_domains.tsv', sep='\t', dtype='str')
+df_domains = pd.read_csv('/DATA/data/_wn30_domains.tsv', sep='\t', dtype='str')
 df_domains['coeff'] = df_domains['coeff'].astype(float).map('{:,.6f}'.format)
 df_wn_dom_sorted = df_domains.sort_values('coeff', ascending=False)
 wn30_list = df_wikidata.wordnet30_id.to_list()

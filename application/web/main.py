@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 
-
-from clinidmap.web import router
+from application.web import router
 
 def create_app():
     app = FastAPI()

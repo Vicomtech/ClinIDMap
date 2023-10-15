@@ -15,7 +15,7 @@ def files2dicts(path):
                 result.append(lang_dict)
     return result
 
-mcr_dir = '/DATA/ezotova_data/ClinIDMap/MCR30_2016'
+mcr_dir = '/DATA/MCR30_2016'
 
 dictionaries = files2dicts(mcr_dir)
 

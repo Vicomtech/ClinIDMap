@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 from elasticsearch_dsl import Search
-from clinidmap.db_processing.elastic_utils import get_elastic
+from application.db_processing.elastic_utils import get_elastic
 
 
 def query_search(q_dic, index_name, elastic=None):
