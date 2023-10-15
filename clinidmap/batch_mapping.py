@@ -2,8 +2,6 @@ import pandas as pd
 from clinidmap.mapping.mapper import ClinIDMapper
 
 
-
-
 mapper = ClinIDMapper()
 
 def get_mapping(source_id, source_type, wiki):
@@ -13,11 +11,10 @@ def get_mapping(source_id, source_type, wiki):
 # df = pd.read_csv('/DATA/ezotova_data/ClinIDMap/corpus/MedMentions/MedMentions_type.tsv', sep='\t', dtype='str')
 # df = df[20:30]
 # print(df.head())
-
 # codes = df.code.to_list()
 
 codes = ["C0020740"]
-# codes = codes[:3]
+
 print('')
 mapped_cuis = []
 mapped_icd10cm = []
