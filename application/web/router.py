@@ -41,7 +41,7 @@ api = APIRouter(
 )
 
 def get_item_mapping(item:MappingExpectModel):
-    return get_mapping(item.source_id, item.source_type, item.wiki)
+    return get_mapping(item.source_id, item.source_type, item.language, item.wiki)
 
 
 @api.post(

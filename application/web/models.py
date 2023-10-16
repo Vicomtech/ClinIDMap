@@ -36,19 +36,22 @@ class IndexResponseModel(BaseModel):
 class MappingExpectModel(BaseModel):
     source_id: str = Field(..., description=f'Item ID in the ontology')
     source_type: str = Field(..., description=f'Ontology type')
+    language: str = Field(..., description=f'Language of UMLS, three letters notation, for example ENG, SPA')
     wiki: Optional[bool] = Field(..., description=f'If we need to get Wikipedia items')
     
     __annotations__ = {
         'source_id': str, 
         'source_type': str, 
+        'language': str,
         'wiki': bool        
     }
 
     class Config: 
         schema_extra = {
             'example': {
-                'source_id': 'C0020587', # C0025519 (metabolism)
+                'source_id': 'C0001344', # C0025519 (metabolism)
                 'source_type': 'UMLS', 
+                'language': 'ENG', 
                 'wiki': False
             }
         }

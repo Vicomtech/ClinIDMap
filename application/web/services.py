@@ -23,8 +23,8 @@ def delete_elastic_index(index_name: str):
 
 mapper = IDMapper()
 
-def get_mapping(source_id, source_type, wiki):
-    result_dict = mapper.map(source_id, source_type, wiki)
+def get_mapping(source_id, source_type, language, wiki):
+    result_dict = mapper.map(source_id, source_type, language, wiki)
     return {'result': result_dict} 
 
 # def update_wikipedia(): 

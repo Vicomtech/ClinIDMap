@@ -1,7 +1,7 @@
 import time
 
-from application.mapping.elastic_search import query_search, result2list_, result2list_unique, get_query, get_umls_query
-from application.mapping.mapping_logic import map_source_umls, map_source_snomedct, map_source_icd10cm, map_source_icd10pcs, cui2sty
+from application.mapping.elastic_search import query_search, result2list_unique, get_query, get_umls_query
+from application.mapping.mapping_logic import map_source_umls, cui2sty
 from application.mapping.util import wikidata2wikipedia_urls
 
 import application.constants as constants
@@ -15,30 +15,32 @@ class IDMapper:
     def __init__(self):
         self.umls_cuis = None 
         
-    def map(self, source_id, source_type, wiki=False): 
+    def map(self, source_id, source_type, language, wiki=False): 
 
         start = time.time()
 
         match source_type: 
             case 'UMLS': 
-                result = map_source_umls(source_id)
-            case 'SNOMED_CT': 
-                result = map_source_snomedct(source_id)
-            case 'ICD10CM': 
-                result = map_source_icd10cm(source_id)
-            case 'ICD10PCS': 
-                result = map_source_icd10pcs(source_id)
+                result = map_source_umls(source_id, language)
+                cuis_list = [source_id]
+            # case 'SNOMED_CT': 
+            #     result = map_source_snomedct(source_id, language)
+            # case 'ICD10CM': 
+            #     result = map_source_icd10cm(source_id, language)
+            # case 'ICD10PCS': 
+            #     result = map_source_icd10pcs(source_id, language)
             case _: 
                 result['status'] = '{} is irrelevant Source Taxonomy Type. Must be: UMLS, SNOMED_CT, ICD10CM or ICD10PCS'.format(self.source_type)
 
-        cuis_list = []
-        for i in result['UMLS_CUI']: 
-            if i['id'] != []: 
-                cuis_list.append(i['id'])
+        # cuis_list = [source_type]
+        # for i in result['UMLS_CUI']: 
+        #     if i['id'] != []: 
+        #         cuis_list.append(i['id'])
 
         if len(cuis_list) > 0: 
             self.umls_cuis = list(set([d for d in cuis_list]))
             sem_types = cui2sty(self.umls_cuis)
+            print(sem_types)
             result = result | sem_types
 
         if wiki: 
@@ -57,7 +59,7 @@ class IDMapper:
                         wikipedia_urls = wikidata2wikipedia_urls(wikidata_items)
                         result['wikipedia_article_url'] = wikipedia_urls
                     else:
-                        q_dic = get_umls_query(c, 'MSH')
+                        q_dic = get_umls_query(c)
                         umls_mesh = query_search(q_dic, constants.UMLS)
                         mesh = result2list_unique(umls_mesh, 'CODE')
                         wikidata_items = []

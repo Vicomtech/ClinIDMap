@@ -2,7 +2,7 @@ version: "2.1"
 services:    
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.2.0
-    container_name: elasticsearch
+    container_name: elasticsearch_app
     environment:
       - discovery.type=single-node
       - cluster.name=docker-cluster
