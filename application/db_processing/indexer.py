@@ -14,8 +14,10 @@ class ElasticIndexer():
         self.elastic = get_elastic()
 
     def index_in_elastic(self, df, index_name): 
+        print(index_name)
 
         index_names = check_elastic_index_names(elastic=self.elastic)
+        print(index_names)
 
         if index_name in index_names:
             self.elastic.indices.delete(index=index_name, ignore=[400, 404])

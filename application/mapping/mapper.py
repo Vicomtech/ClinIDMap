@@ -1,7 +1,7 @@
 import time
 
 from application.mapping.elastic_search import query_search, result2list_unique, get_query, get_umls_query
-from application.mapping.mapping_logic import map_source_umls, cui2sty
+from application.mapping.mapping_logic import map_source_umls, map_source_snomedct, cui2sty
 from application.mapping.util import wikidata2wikipedia_urls
 
 import application.constants as constants
@@ -23,9 +23,12 @@ class IDMapper:
             case 'UMLS': 
                 result = map_source_umls(source_id, language)
                 cuis_list = [source_id]
-            # case 'SNOMED_CT': 
-            #     result = map_source_snomedct(source_id, language)
-            # case 'ICD10CM': 
+            case 'SNOMED_CT': 
+                result = map_source_snomedct(source_id, language)
+                print(result)
+                # cuis_list = [d['CUI'] for d in result['UMLS']]
+                cuis_list = flatten([d['CUI'] for d in result['UMLS']])
+                
             #     result = map_source_icd10cm(source_id, language)
             # case 'ICD10PCS': 
             #     result = map_source_icd10pcs(source_id, language)

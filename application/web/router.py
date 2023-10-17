@@ -55,9 +55,10 @@ def get_item_mapping(item:MappingExpectModel):
     }
 )
 def post_index(index_name: str, item: IndexExpectModel):
-    print(index_name)
+    print('INDEX', index_name)
+    print('ITEM', item)
     # TODO: this should probably be an ASYNC method?
-    return index_database_service(item.path, item.separator, item.headers, index_name)
+    return index_database_service(item.path, item.separator, index_name, item.headers)
 
 
 @api.delete(

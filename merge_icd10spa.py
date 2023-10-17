@@ -13,43 +13,58 @@ def rename_x(df):
             df.rename(columns={col:col.rstrip('_x')}, inplace=True)
 
 
-df = pd.read_csv('database_/UMLS_CIE10_WIKI.tsv', sep='|', dtype='str').fillna('')
+df = pd.read_csv('database_/UMLS_WIKI_ICD10_17102023.txt', sep='|', dtype='str').fillna('')
 
 print(df.head())
 
-# df_select = df[(df['WN31'] != '') & (df['SNOMEDCT2ICD10'] != '')]
 
-# df_select.to_csv('exampple_for_paper_snomed.tsv', sep='|')
+# df_cie10d = pd.read_csv('database_/CIE10DIAGNOSTICOS_2022.tsv', sep='\t', dtype='str')
+# df_cie10d = df_cie10d.rename(columns={'ICD10CM_SPA': 'SNOMEDCT2ICD10_SPA'})
+# # df_cie10d['SAB'] = 'ICD10CM'
+# df_merge_cie10d = df.merge(df_cie10d, left_on=['SNOMEDCT2ICD10'], right_on=['CODE'], how='left').fillna('')
+# print('Merge CIE10CM SPA ', len(df_merge_cie10d))
+# drop_y(df_merge_cie10d)
+# rename_x(df_merge_cie10d)
+# df_merge_cie10d = df_merge_cie10d.rename(columns={'ICD10ENG': 'SNOMEDCT2ICD10_ENG'})
+# print(df_merge_cie10d.head())
 
-# df_select2 = df[(df['WN31'] != '') & (df['ICD10CM_SPA'] != '')]
-# df_select2.to_csv('exampple_for_paper_icd.tsv', sep='|')
+# check1 = df_merge_cie10d[df_merge_cie10d['SNOMEDCT2ICD10'] != '']
+# print('SNOMEDCT2ICD10', len(check1))
+# check2 = df_merge_cie10d[df_merge_cie10d['SNOMEDCT2ICD10_SPA'] != '']
+# print('SNOMEDCT2ICD10_SPA', len(check2))
 
-df_cie10d = pd.read_csv('database_/CIE10DIAGNOSTICOS_2022.tsv', sep='\t', dtype='str')
-df_cie10d = df_cie10d.rename(columns={'ICD10CM_SPA': 'SNOMEDCT2ICD10_SPA'})
-# df_cie10d['SAB'] = 'ICD10CM'
-df_merge_cie10d = df.merge(df_cie10d, left_on=['SNOMEDCT2ICD10'], right_on=['CODE'], how='left').fillna('')
-print('Merge CIE10CM SPA ', len(df_merge_cie10d))
-drop_y(df_merge_cie10d)
-rename_x(df_merge_cie10d)
-df_merge_cie10d = df_merge_cie10d.rename(columns={'ICD10ENG': 'SNOMEDCT2ICD10_ENG'})
-print(df_merge_cie10d.head())
+# check3 = df_merge_cie10d[(df_merge_cie10d['SNOMEDCT2ICD10_SPA'] == '') & (df_merge_cie10d['SNOMEDCT2ICD10'] != '')]
 
-check1 = df_merge_cie10d[df_merge_cie10d['SNOMEDCT2ICD10'] != '']
-print('SNOMEDCT2ICD10', len(check1))
-check2 = df_merge_cie10d[df_merge_cie10d['SNOMEDCT2ICD10_SPA'] != '']
-print('SNOMEDCT2ICD10_SPA', len(check2))
+# check3.to_csv('snomed_prueba.tsv', sep='\t', index=False)
+# # df_cie10p = pd.read_csv('database_/CIE10PROCEDIMIENTOS_2022.tsv', sep='\t', dtype='str')
+# # df_cie10p['SAB'] = 'ICD10PCS'
+# # df_merge_cie10p = df_merge_cie10d.merge(df_cie10p, on=['CODE', 'SAB'], how='left').fillna('')
+# # print('Merge CIE10PCS SPA', len(df_merge_cie10p))
 
-check3 = df_merge_cie10d[(df_merge_cie10d['SNOMEDCT2ICD10_SPA'] == '') & (df_merge_cie10d['SNOMEDCT2ICD10'] != '')]
+df = df.rename(columns={'ICD10OCS_SPA': 'ICD10PCS_SPA'})
 
-check3.to_csv('snomed_prueba.tsv', sep='\t', index=False)
-# df_cie10p = pd.read_csv('database_/CIE10PROCEDIMIENTOS_2022.tsv', sep='\t', dtype='str')
-# df_cie10p['SAB'] = 'ICD10PCS'
-# df_merge_cie10p = df_merge_cie10d.merge(df_cie10p, on=['CODE', 'SAB'], how='left').fillna('')
-# print('Merge CIE10PCS SPA', len(df_merge_cie10p))
-df_merge_cie10d = df_merge_cie10d[["CUI", "LAT", "TS", "LUI", "STT", "SUI", "ISPREF", "AUI", 
+df_merge_cie10d = df[["CUI", "LAT", "TS", "LUI", "STT", "SUI", "ISPREF", "AUI", 
     "SAUI", "SCUI", "SDUI", "SAB", "TTY", "CODE", "STR", "SRL", 
-    "SUPPRESS", "CVF", "ICD10CM_SPA", "ICD10OCS_SPA", "SNOMEDCT2ICD10", "SNOMEDCT2ICD10_ENG", "SNOMEDCT2ICD10_SPA",
+    "SUPPRESS", "CVF", "ICD10CM_SPA", "ICD10PCS_SPA", "SNOMEDCT2ICD10", "SNOMEDCT2ICD10_ENG", "SNOMEDCT2ICD10_SPA",
     "WIKIDATA", "MESH_WIKI", "SNOMED_CT_WIKI", "ICD10_WIKI", "ICD10CM_WIKI", "ICD10PCS_WIKI", "NCBI_WIKI", "WN31", "WN30", "WN_SENSE"
     ]]
 
-df_merge_cie10d.to_csv('database_/UMLS_WIKI_ICD10_16102023.txt', sep='|', index=False)
+# df_merge_cie10d.to_csv('database_/UMLS_WIKI_ICD10_17102023.txt', sep='|', index=False)
+
+df_select = df_merge_cie10d[(df_merge_cie10d['WN31'] != '') & (df_merge_cie10d['SNOMEDCT2ICD10'] != '')]
+df_select.to_csv('LREC2024/samples/example_01.tsv', sep='|')
+
+df_select2 = df_merge_cie10d[(df_merge_cie10d['WN31'] != '') & (df_merge_cie10d['ICD10CM_SPA'] != '')]
+df_select2.to_csv('LREC2024/samples/example_02.tsv', sep='|')
+
+df_sty = pd.read_csv('/DATA/ezotova_data/UMLS/2023/MRSTY.RRF', sep='|', dtype='str', names=["CUI", , "STN", "STY", "ATUI", "CVF", "_"])
+
+df_sty = df_sty[['CUI', 'TUI', 'STY']]
+print(df_sty.head())
+
+df_merge_cie10d_sty = df_merge_cie10d.merge(df_sty, on=['CUI'], how='left').fillna('')
+
+df_merge_cie10d_sty.to_csv('database_/UMLS_WIKI_ICD10_STY_17102023.txt', sep='|', index=False)
+
+df_merge_cie10d_sty_sample = df_merge_cie10d_sty[:1000]
+df_merge_cie10d_sty_sample.to_csv('LREC2024/samples/example_03.tsv', sep='|', index=False)

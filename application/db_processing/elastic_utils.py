@@ -33,6 +33,7 @@ def load_table(path, separator, headers=None):
     else: 
         df = pd.read_csv(path, sep=separator, dtype='str')
     df = df.fillna('')
+    
     print('{} documents are loaded to index'.format(len(df)))
     return df
 

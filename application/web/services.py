@@ -9,7 +9,8 @@ from application.mapping.mapper import IDMapper
 indexer = ElasticIndexer()
 elastic = get_elastic()
 
-def index_database_service(path, separator, headers, index_name): 
+def index_database_service(path, separator, index_name, headers=None): 
+    print(index_name)
     df = load_table(path, separator, headers)
     message = indexer.index_in_elastic(df, index_name)
     return {'message': message}

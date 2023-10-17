@@ -7,12 +7,12 @@ from pydantic import BaseModel, validator, Field
 
 class IndexExpectModel(BaseModel):
     path: Path = Field(..., description=f'Path to the file whose content will be indexed. Shoud be a textual table')
-    headers: List[str] = Field(..., description=f'List of columns in the table to be used for database indexing')
+    headers: Optional[List[str]] = Field(None, description=f'List of columns in the table to be used for database indexing')
     separator: str = Field(..., description=f'Delimiter in the table, for example, tabulator, | or ; etc')
 
     __annotations__ = {
         'path': Path,
-        'headers': List[str], 
+        'headers': Optional[List[str]], 
         'separator': str
         }
 

@@ -48,23 +48,16 @@ def map_source_umls(source_id, language):
     result['status'] = 'OK'
 
     umls_cuis = [source_id]
-    #get all SNOMED codes in UMLS related to this CUI
     q_dic = get_umls_query(source_id, language) 
     print('QUERY', q_dic)
     
     umls_result = query_search(q_dic, constants.UMLS_EXT)
     print('RESULT')
-    # print(umls_result)
-    # snomed_codes_en = result2list_(umls_result, 'CODE')
-    # umls_descrs = result2list_(umls_result, 'STR')
-    # dict_names = result2list_(umls_result, 'SAB')
+
     result = result2dicts(umls_result)
     print(result)
 
-    icd10cm_codes  = []
-    snomed_descrs_en = []
-    snomed_codes_es = []
-    snomed_descrs_es  = []
+
     # search in SNOMED-CT
     
     # for code in snomed_codes_en: 
@@ -125,61 +118,66 @@ def map_source_umls(source_id, language):
 
     return result 
 
-# def map_source_snomedct(source_id): 
+def map_source_snomedct(source_id, language): 
 
-#     result = {}
-#     result['status'] = 'OK'
-#     result['source_id'] = source_id
+    result = {}
+    result['status'] = 'OK'
+    result['source_id'] = source_id
 
-#     q_dic = get_query('CODE', source_id)
-#     umls_result = query_search(q_dic, constants.UMLS)
+    q_dic = get_umls2sab_query(source_id=source_id, target_sab='SCTSPA', lang=language)
+    print('QUERY', q_dic)
+    umls_result = query_search(q_dic, constants.UMLS_EXT)
 
-#     umls_cuis = result2list_(umls_result, 'CUI')
-#     umls_descrs = result2list_(umls_result, 'STR')
+    result = result2dicts(umls_result)
+    print(result)
 
-#     snomed_descrs_en = []
-#     snomed_codes_es = []
-#     snomed_descrs_es  = []
-#     icd10cm_codes  = []
 
-#     q_dic = get_query("conceptId", source_id)
-#     snomed_en_result = query_search(q_dic, constants.SNOMED_EN)
-#     if snomed_en_result['hits']['total']['value'] > 0:
-#         for hit in snomed_en_result['hits']['hits']: 
-#             snomed_descrs_en.append(hit['_source']['term'])
+    # umls_cuis = result2list_(umls_result, 'CUI')
+    # umls_descrs = result2list_(umls_result, 'STR')
 
-#     q_dic = get_query("referencedComponentId", source_id)
-#     snomed_map_result = query_search(q_dic, constants.SNOMED2ICD10)
-#     if snomed_map_result['hits']['total']['value'] > 0:
-#         for hit in snomed_map_result['hits']['hits']: 
-#             icd10cm_codes .append(hit['_source']['mapTarget'])
+    # snomed_descrs_en = []
+    # snomed_codes_es = []
+    # snomed_descrs_es  = []
+    # icd10cm_codes  = []
 
-#     q_dic_es = get_query("conceptId", source_id)
-#     snomed_es_result = query_search(q_dic_es, constants.SNOMED_ES)
+    # q_dic = get_query("conceptId", source_id)
+    # snomed_en_result = query_search(q_dic, constants.SNOMED_EN)
+    # if snomed_en_result['hits']['total']['value'] > 0:
+    #     for hit in snomed_en_result['hits']['hits']: 
+    #         snomed_descrs_en.append(hit['_source']['term'])
 
-#     if snomed_es_result['hits']['total']['value'] > 0:
-#         for hit in snomed_es_result['hits']['hits']: 
-#             snomed_descrs_es .append(hit['_source']['term'])
-#             snomed_codes_es.append(hit['_source']['conceptId'])
+    # q_dic = get_query("referencedComponentId", source_id)
+    # snomed_map_result = query_search(q_dic, constants.SNOMED2ICD10)
+    # if snomed_map_result['hits']['total']['value'] > 0:
+    #     for hit in snomed_map_result['hits']['hits']: 
+    #         icd10cm_codes .append(hit['_source']['mapTarget'])
 
-#     icd10cm_descrs_es = []
+    # q_dic_es = get_query("conceptId", source_id)
+    # snomed_es_result = query_search(q_dic_es, constants.SNOMED_ES)
 
-#     for code in icd10cm_codes : 
-#         q_dic = get_query("CODE", code)
-#         icd10cm_es_result =  query_search(q_dic, constants.ICD10CM)
-#         if icd10cm_es_result['hits']['total']['value'] > 0:
-#             for hit in icd10cm_es_result['hits']['hits']: 
-#                 icd10cm_descrs_es.append(hit['_source']['ICD10DESCR_SPA'])
+    # if snomed_es_result['hits']['total']['value'] > 0:
+    #     for hit in snomed_es_result['hits']['hits']: 
+    #         snomed_descrs_es .append(hit['_source']['term'])
+    #         snomed_codes_es.append(hit['_source']['conceptId'])
 
-#     result['UMLS_CUI'] = lists2tuples(umls_cuis, umls_descrs)
+    # icd10cm_descrs_es = []
 
-#     result['SNOMED_CT_EN'] = lists2tuples([source_id], snomed_descrs_en)
-#     result['SNOMED_CT_ES'] = lists2tuples([source_id], snomed_descrs_es)
+    # for code in icd10cm_codes : 
+    #     q_dic = get_query("CODE", code)
+    #     icd10cm_es_result =  query_search(q_dic, constants.ICD10CM)
+    #     if icd10cm_es_result['hits']['total']['value'] > 0:
+    #         for hit in icd10cm_es_result['hits']['hits']: 
+    #             icd10cm_descrs_es.append(hit['_source']['ICD10DESCR_SPA'])
 
-#     result['ICD10CM_ES'] = lists2tuples(icd10cm_codes, icd10cm_descrs_es)
-#     result['ICD10PCS_ES'] = icd10_in_umls(umls_cuis, 'ICD10PCS')
+    # result['UMLS_CUI'] = lists2tuples(umls_cuis, umls_descrs)
 
-#     return result
+    # result['SNOMED_CT_EN'] = lists2tuples([source_id], snomed_descrs_en)
+    # result['SNOMED_CT_ES'] = lists2tuples([source_id], snomed_descrs_es)
+
+    # result['ICD10CM_ES'] = lists2tuples(icd10cm_codes, icd10cm_descrs_es)
+    # result['ICD10PCS_ES'] = icd10_in_umls(umls_cuis, 'ICD10PCS')
+
+    return result
 
 # def map_source_icd10cm(source_id): 
 #     result = {}
