@@ -1,4 +1,6 @@
 from __future__ import unicode_literals
+
+import csv
 import pandas as pd
 
 from application.config import settings
@@ -23,8 +25,17 @@ def get_header_names(headers_list):
 def filterKeys(document, headers):
     return {key: document[key] for key in headers}
 
-def load_table(path, separator, headers=None): 
+def detect_delimiter(path):
+
+    with open(path, 'r') as f:
+        sample = f.read(1024)
+        dialect = csv.Sniffer().sniff(sample)
+        delimiter = dialect.delimiter
+        return delimiter
+
+def load_table(path, headers=None): 
     names_dict = {}
+    separator = detect_delimiter(path)
     if headers: 
         df = pd.read_csv(path, sep=separator, dtype='str', header=None)
         names_dict = get_header_names(headers)
@@ -34,7 +45,7 @@ def load_table(path, separator, headers=None):
         df = pd.read_csv(path, sep=separator, dtype='str')
     df = df.fillna('')
     
-    print('{} documents are loaded to index'.format(len(df)))
+    print('{} documents are prepared to index'.format(len(df)))
     return df
 
 def doc_generator(df, index_name):

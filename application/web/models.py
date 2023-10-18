@@ -4,16 +4,13 @@ from typing import Dict, List, Optional, Any
 from pydantic import BaseModel, validator, Field
 
 
-
 class IndexExpectModel(BaseModel):
     path: Path = Field(..., description=f'Path to the file whose content will be indexed. Shoud be a textual table')
-    headers: Optional[List[str]] = Field(None, description=f'List of columns in the table to be used for database indexing')
-    separator: str = Field(..., description=f'Delimiter in the table, for example, tabulator, | or ; etc')
+    headers: Optional[List[str]] = Field(None, description=f'List of columns in the table to be used for database indexing, if there is no header in the file.')
 
     __annotations__ = {
         'path': Path,
-        'headers': Optional[List[str]], 
-        'separator': str
+        'headers': Optional[List[str]]
         }
 
     @validator('path')

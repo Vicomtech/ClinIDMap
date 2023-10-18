@@ -17,7 +17,6 @@ df = pd.read_csv('database_/UMLS_WIKI_ICD10_17102023.txt', sep='|', dtype='str')
 
 print(df.head())
 
-
 # df_cie10d = pd.read_csv('database_/CIE10DIAGNOSTICOS_2022.tsv', sep='\t', dtype='str')
 # df_cie10d = df_cie10d.rename(columns={'ICD10CM_SPA': 'SNOMEDCT2ICD10_SPA'})
 # # df_cie10d['SAB'] = 'ICD10CM'
@@ -57,14 +56,29 @@ df_select.to_csv('LREC2024/samples/example_01.tsv', sep='|')
 df_select2 = df_merge_cie10d[(df_merge_cie10d['WN31'] != '') & (df_merge_cie10d['ICD10CM_SPA'] != '')]
 df_select2.to_csv('LREC2024/samples/example_02.tsv', sep='|')
 
-df_sty = pd.read_csv('/DATA/ezotova_data/UMLS/2023/MRSTY.RRF', sep='|', dtype='str', names=["CUI", , "STN", "STY", "ATUI", "CVF", "_"])
+df_sty = pd.read_csv('/DATA/ezotova_data/UMLS/2023/MRSTY.RRF', sep='|', dtype='str', names=["CUI", "TUI", "STN", "SEMTYPE", "ATUI", "CVF", "_"])
 
-df_sty = df_sty[['CUI', 'TUI', 'STY']]
+df_sty = df_sty[['CUI', 'TUI', 'SEMTYPE']]
 print(df_sty.head())
 
 df_merge_cie10d_sty = df_merge_cie10d.merge(df_sty, on=['CUI'], how='left').fillna('')
 
-df_merge_cie10d_sty.to_csv('database_/UMLS_WIKI_ICD10_STY_17102023.txt', sep='|', index=False)
+df_groups = pd.read_csv('database/SemGroups.txt', sep='|', dtype='str', names=['SEMGROUP', 'DEF', 'TUI', 'GROUPTYPE'])
+print(df_groups.head())
+df_merge_cie10d_sty_g = df_merge_cie10d_sty.merge(df_groups, on=['TUI'], how='left').fillna('')
 
-df_merge_cie10d_sty_sample = df_merge_cie10d_sty[:1000]
-df_merge_cie10d_sty_sample.to_csv('LREC2024/samples/example_03.tsv', sep='|', index=False)
+df_merge_cie10d_sty_g = df_merge_cie10d_sty_g[["CUI", "LAT", "TS", "LUI", "STT", "SUI", "ISPREF", "AUI", 
+    "SAUI", "SCUI", "SDUI", "SAB", "TTY", "CODE", "STR", "SRL", 
+    "SUPPRESS", "CVF", "ICD10CM_SPA", "ICD10PCS_SPA", "SNOMEDCT2ICD10", "SNOMEDCT2ICD10_ENG", "SNOMEDCT2ICD10_SPA",
+    "WIKIDATA", "MESH_WIKI", "SNOMED_CT_WIKI", "ICD10_WIKI", "ICD10CM_WIKI", "ICD10PCS_WIKI", "NCBI_WIKI", "WN31", "WN30", "WN_SENSE", 
+    "TUI", "SEMTYPE", "SEMGROUP", "DEF"
+    ]]
+df_merge_cie10d_sty_g.to_csv('database_/UMLS_WIKI_ICD10_STY_18102023.txt', sep='|', index=False)
+print(df_merge_cie10d_sty_g.head())
+df_merge_cie10d_sty_g_sample = df_merge_cie10d_sty_g[:1000]
+
+df_merge_cie10d_sty_g_sample.to_csv('LREC2024/samples/example_03.tsv', sep='|', index=False, )
+column_names = df_merge_cie10d_sty_g.columns.tolist()
+print(column_names)
+print(len(column_names))
+print(len(df_merge_cie10d_sty_g))
