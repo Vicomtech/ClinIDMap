@@ -4,15 +4,6 @@ import os
 import gc
 
 
-# environment
-# os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-# gpu_ids = [""]
-# os.environ['CUDA_VISIBLE_DEVICES'] = ','.join(gpu_ids)
-# os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'max_split_size_mb:128'
-
-# gpu_ids = ["2"]
-# os.environ['CUDA_VISIBLE_DEVICES'] = ','.join(gpu_ids)
-
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 print('DEVICE', device)
 ## MODEL

@@ -35,29 +35,7 @@ def result2dicts(result_dict):
     res = {}
     if result_dict['hits']['total']['value'] > 0:
         for hit in result_dict['hits']['hits']:
-            if hit['_source']['SAB'] in vocabs: 
-                # d = {
-                # 'lang': hit['_source']['LAT'], 
-                # 'CUI':  hit['_source']['CUI'],
-                # 'vocabulary': hit['_source']['SAB'], 
-                # 'id': hit['_source']['CODE'], 
-                # 'description': hit['_source']['STR'], 
-                # 'icd_10_cm_spa': hit['_source']['ICD10CM_SPA'], 
-                # 'icd_10_pcs_spa': hit['_source']['ICD10OCS_SPA'],
-                # 'wikidata':  hit['_source']['WIKIDATA'], 
-                # 'mesh_wiki': hit['_source']['MESH_WIKI'],
-                # 'snomed_ct_wiki': hit['_source']['SNOMED_CT_WIKI'], 
-                # 'icd_10_wiki': hit['_source']['ICD10_WIKI'], 
-                # 'icd_10_cm_wiki': hit['_source']['ICD10CM_WIKI'], 
-                # 'icd_10_pcs_wiki': hit['_source']['ICD10PCS_WIKI'], 
-                # 'ncbi_wiki': hit['_source']['NCBI_WIKI'], 
-                # 'wordnet_3_1': hit['_source']['WN31'], 
-                # 'wordnet_3_0': hit['_source']['WN30'], 
-                # 'wordnet_senses': hit['_source']['WN_SENSE'], 
-                # 'snomedct2icd10': hit['_source']['SNOMEDCT2ICD10'], 
-                # 'snomedct2icd10_eng': hit['_source']['SNOMEDCT2ICD10_ENG'],
-                # 'snomedct2icd10_spa': hit['_source']['SNOMEDCT2ICD10_SPA']
-                #  }    
+            if hit['_source']['SAB'] in vocabs:   
                 lst.append(hit['_source'])
     res['UMLS'] = lst
     return res
@@ -95,11 +73,7 @@ def get_umls_query(source_id, lang=None):
     return q_dic
 
 
-def get_umls2sab_query(source_id, target_sab, lang=None):
-    '''
-    source_id: UMLS ID (CUI) to search
-    target_sab: ontology mapped to this ID
-    '''
+def get_sab_query(source_id, target_sab, lang=None):
     if lang:
         q_dic = {
             "query": { 
@@ -123,25 +97,6 @@ def get_umls2sab_query(source_id, target_sab, lang=None):
                         }
                     }
                 }      
-    return q_dic
-
-def get_umls2snomed_query(source_id, target_sab):
-    '''
-    source_id: UMLS ID (CUI) to search
-    target_sab: ontology mapped to this ID
-    '''
-    q_dic = {
-        "query": { 
-            "bool": { 
-            "must": [
-                {"match_phrase": {"SAB": 'SNOMEDCT_US'}},
-                {"match_phrase": {"CODE": source_id}},
-                {"match_phrase": {"SAB": target_sab}}, 
-                {"match_phrase": {"LAT": "ENG"}}
-                ]
-                    }
-                }
-            }
     return q_dic
 
 def get_umls2code_query(source_id):

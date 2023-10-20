@@ -1,112 +1,56 @@
 import time
 
-from application.mapping.elastic_search import query_search, result2list_unique, get_query, get_umls_query
-from application.mapping.mapping_logic import map_source_umls, map_source_snomedct, cui2sty
+from application.mapping.mapping_logic import map_source_umls, map_source_sab
 from application.mapping.util import wikidata2wikipedia_urls
 
 import application.constants as constants
 
-def flatten(l):
-    return [item for sublist in l for item in sublist]
-
-
 
 class IDMapper: 
     def __init__(self):
-        self.umls_cuis = None 
-        
+        self.cuis_list = []
+    
+    def map_timer(self, start, end):
+        hours, rem = divmod(end-start, 3600)
+        minutes, seconds = divmod(rem, 60)
+        print("Time: {:0>2}:{:0>2}:{:05.4f}".format(int(hours),int(minutes),seconds))
+        return "{:0>2}:{:0>2}:{:05.4f}".format(int(hours),int(minutes),seconds)
+
     def map(self, source_id, source_type, language, wiki=False): 
 
         start = time.time()
-
-        match source_type: 
+        match source_type:
             case 'UMLS': 
                 result = map_source_umls(source_id, language)
-                cuis_list = [source_id]
+                self.cuis_list = [source_id]
             case 'SNOMED_CT': 
-                result = map_source_snomedct(source_id, language)
-                print(result)
-                # cuis_list = [d['CUI'] for d in result['UMLS']]
-                cuis_list = flatten([d['CUI'] for d in result['UMLS']])
-                
-            #     result = map_source_icd10cm(source_id, language)
-            # case 'ICD10PCS': 
-            #     result = map_source_icd10pcs(source_id, language)
+                sab = 'SNOMEDCT_US'
+                if language == 'SPA':
+                    sab = 'SCTSPA'
+                result = map_source_sab(source_id, sab, language)
+                self.cuis_list = [d['CUI'] for d in result['UMLS']]
+            case 'ICD10CM':
+                sab = 'ICD10CM'
+                result = map_source_sab(source_id, sab, language)
+                self.cuis_list = [d['CUI'] for d in result['UMLS']]
+            case 'ICD10PCS':
+                sab = 'ICD10PCS'
+                result = map_source_sab(source_id, sab, language)
+                self.cuis_list = [d['CUI'] for d in result['UMLS']]
             case _: 
                 result['status'] = '{} is irrelevant Source Taxonomy Type. Must be: UMLS, SNOMED_CT, ICD10CM or ICD10PCS'.format(self.source_type)
 
-        # cuis_list = [source_type]
-        # for i in result['UMLS_CUI']: 
-        #     if i['id'] != []: 
-        #         cuis_list.append(i['id'])
-
-        if len(cuis_list) > 0: 
-            self.umls_cuis = list(set([d for d in cuis_list]))
-            sem_types = cui2sty(self.umls_cuis)
-            print(sem_types)
-            result = result | sem_types
-
         if wiki: 
-            wikidata_items = []
-            wiki_result = []
-            if self.umls_cuis:
-                for c in self.umls_cuis:
-                    q_dic_ = get_query('cui', c)
-                    wiki_result = query_search(q_dic_, constants.CUI2WIKI)
-                    print('WIKI RESULT')
-                    print(wiki_result)
-                    wikidata_items = result2list_unique(wiki_result, 'item') # get links to the Wikidata items
-                    result['wikidata_item_url'] = wikidata_items
-                    
-                    if len(wikidata_items) > 0: 
-                        wikipedia_urls = wikidata2wikipedia_urls(wikidata_items)
-                        result['wikipedia_article_url'] = wikipedia_urls
-                    else:
-                        q_dic = get_umls_query(c)
-                        umls_mesh = query_search(q_dic, constants.UMLS)
-                        mesh = result2list_unique(umls_mesh, 'CODE')
-                        wikidata_items = []
-                        for m in list(set(mesh)): 
-                            q_dic_m = get_query("mesh", m)
-                            wiki_result = query_search(q_dic_m, constants.CUI2WIKI) # config.MESH2WIKI
-                            if wiki_result['hits']['total']['value'] > 0:
-                                for hit in wiki_result['hits']['hits']: 
-                                    if hit['_source']['item'] not in wikidata_items: 
-                                        wikidata_items.append(hit['_source']['item'])
-                            
-                        result['wikidata_item_url'] = wikidata_items
-                        wikipedia_urls = wikidata2wikipedia_urls(wikidata_items)
-                        result['wikipedia_article_url'] = wikipedia_urls
-            else: 
-                result['wiki_status'] = 'No code provided for search in Wikidata and WordNet'
+            wikidata_items = [d['WIKIDATA'] for d in result['UMLS']]
+            urls = {}
+            for item, cui in zip(wikidata_items, self.cuis_list): 
+                wikipedia_urls = wikidata2wikipedia_urls(item)
+                urls[cui] = wikipedia_urls   
 
-            if len(wikidata_items) == 0: 
-                if len(result['ICD10CM_ES']) > 0: 
-                    for c in result['ICD10CM_ES']:
-                        q_dic_ = get_query('ICD10', c['id'])
-                        wiki_result = query_search(q_dic_, constants.CUI2WIKI)
-                        wikidata_items = result2list_unique(wiki_result, 'item') # get links to the Wikidata items
-                        result['wikidata_item_url'] = wikidata_items      
-                        wikipedia_urls = wikidata2wikipedia_urls(wikidata_items)
-                        result['wikipedia_article_url'] = wikipedia_urls
-                else: 
-                    result['wiki_status'] = 'No code provided for search in Wikidata and WordNet'                      
-            
-            wordnet31_ids = result2list_(wiki_result, 'wordnet31_id')
-            wordnet_senses = result2list_(wiki_result, 'sense')
-            wns = []
-            for w, s in zip(wordnet31_ids, wordnet_senses): 
-                d = {}
-                d['wordnet3.1_id'] = w
-                d['senses'] = s
-                if d not in wns: 
-                    wns.append(d)
-            result['wordnet'] = wns
-            
+        result['wikipedia_article_url'] = urls         
         end = time.time()
-        hours, rem = divmod(end-start, 3600)
-        minutes, seconds = divmod(rem, 60)
-        # print("Time: {:0>2}:{:0>2}:{:05.4f}".format(int(hours),int(minutes),seconds))
+
+        result['time'] = self.map_timer(start, end)
 
         return result
 

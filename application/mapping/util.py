@@ -40,15 +40,11 @@ def get_wikipedia_url_from_wikidata_id(wikidata_id, debug=False):
                 return('There is no Wikipedia article for {} item'.format(wikidata_id))
     return None
 
-
-def wikidata2wikipedia_urls(wikidata_items):
+def wikidata2wikipedia_urls(item):
     wikipedia_urls = []
-    for item in wikidata_items: 
-        wiki_id = item.split('/')[-1]
-        wikipedia_url = get_wikipedia_url_from_wikidata_id(wiki_id, debug=False)
-        wikipedia_urls.append(wikipedia_url)
+    wiki_id = item.strip()
+    wikipedia_urls = get_wikipedia_url_from_wikidata_id(wiki_id, debug=False)
     return wikipedia_urls
-
 
 def remove_duplicates(lst): 
     lst_uniq = []
