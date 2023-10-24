@@ -49,7 +49,7 @@ def get_umls_query(source_id, lang=None):
     '''
     if lang: 
         q_dic = {
-            "size": 1000,
+            "size": 100,
             "query": { 
                 "bool": { 
                 "must": [
@@ -61,7 +61,7 @@ def get_umls_query(source_id, lang=None):
                 }
     else: 
         q_dic = {
-            "size": 1000,
+            "size": 100,
             "query": { 
                 "bool": { 
                 "must": [
@@ -76,6 +76,7 @@ def get_umls_query(source_id, lang=None):
 def get_sab_query(source_id, target_sab, lang=None):
     if lang:
         q_dic = {
+            "size": 100,
             "query": { 
                 "bool": { 
                 "must": [
@@ -98,33 +99,3 @@ def get_sab_query(source_id, target_sab, lang=None):
                     }
                 }      
     return q_dic
-
-def get_umls2code_query(source_id):
-    '''
-    source_id: UMLS ID (CUI) to search
-    target_sab: ontology mapped to this ID
-    '''
-    q_dic = {
-        "query": { 
-            "bool": { 
-            "must": [
-                {"match_phrase": {"CODE": source_id}},
-                {"match_phrase": {"LAT": "ENG"}}
-                ]
-                    }
-                }
-            }
-    return q_dic
-
-def get_query(field, code): 
-    q_dic = {
-        "query": {
-            "bool": {
-                "must": [
-                    {"match_phrase": {field: code}}
-                ]
-                }
-            }
-            }
-    return q_dic
-

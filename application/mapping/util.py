@@ -1,15 +1,5 @@
 import requests
-from requests import utils
 
-
-def lists2tuples(list1, list2): 
-    result = []
-    for i, j in zip(list1, list2): 
-        d = {}
-        d['id'] = str(i)
-        d['description'] = str(j)
-        result.append(d)
-    return result
     
 def get_wikipedia_url_from_wikidata_id(wikidata_id, debug=False):
     url = (
@@ -46,9 +36,3 @@ def wikidata2wikipedia_urls(item):
     wikipedia_urls = get_wikipedia_url_from_wikidata_id(wiki_id, debug=False)
     return wikipedia_urls
 
-def remove_duplicates(lst): 
-    lst_uniq = []
-    for i in lst: 
-        if i not in lst_uniq:
-            lst_uniq.append(i) 
-    return lst_uniq

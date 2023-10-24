@@ -3,8 +3,6 @@ import time
 from application.mapping.mapping_logic import map_source_umls, map_source_sab
 from application.mapping.util import wikidata2wikipedia_urls
 
-import application.constants as constants
-
 
 class IDMapper: 
     def __init__(self):
@@ -48,7 +46,7 @@ class IDMapper:
                 urls[cui] = wikipedia_urls   
 
             result['wikipedia_article_url'] = urls         
-            
+
         end = time.time()
 
         result['time'] = self.map_timer(start, end)

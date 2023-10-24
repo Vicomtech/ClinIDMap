@@ -17,6 +17,3 @@ mapped_icd10pcs = []
 for code in codes: 
     mapped = get_mapping(code, 'UMLS', wiki=False)
     print()
-
-    # print(mapped)
-    # print()
