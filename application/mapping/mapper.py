@@ -47,7 +47,8 @@ class IDMapper:
                 wikipedia_urls = wikidata2wikipedia_urls(item)
                 urls[cui] = wikipedia_urls   
 
-        result['wikipedia_article_url'] = urls         
+            result['wikipedia_article_url'] = urls         
+            
         end = time.time()
 
         result['time'] = self.map_timer(start, end)
