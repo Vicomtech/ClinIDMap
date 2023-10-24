@@ -13,21 +13,8 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 from application.constants import DATABASE
 from application.wiki_wordnet.wn_mapping import wn_sense_mapping
 
-# ?itemLabel ?itemDescription 
 
 endpoint_url = "https://query.wikidata.org/sparql"
-
-# query_cui = """PREFIX bd: <http://www.bigdata.com/rdf#> 
-# PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
-# PREFIX schema: <http://schema.org/> 
-# PREFIX wd: <http://www.wikidata.org/entity/> 
-# PREFIX wikibase: <http://wikiba.se/ontology#> 
-
-# SELECT ?item ?UMLS_CUI WHERE {
-#   ?item wdt:P2892 ?UMLS_CUI.
-#   SERVICE wikibase:label {
-#     bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-# }"""
 
 query_cui = """
 PREFIX bd: <http://www.bigdata.com/rdf#> 
@@ -72,22 +59,6 @@ SELECT ?item ?Snomed_CT WHERE {
 
 """
 
-# identificador_MeSH
-# query_wordnet0 = """PREFIX bd: <http://www.bigdata.com/rdf#>
-# PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-# PREFIX schema: <http://schema.org/>
-# PREFIX wd: <http://www.wikidata.org/entity/>
-# PREFIX wikibase: <http://wikiba.se/ontology#>
-
-# SELECT ?item ?identificador_de_synset_de_WordNet_3_1 ?UMLS_CUI ?mesh ?icd10 ?Snomed_CT WHERE {
-#   SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-#   OPTIONAL { ?item wdt:P8814 ?identificador_de_synset_de_WordNet_3_1. }
-#   OPTIONAL { ?item wdt:P2892 ?UMLS_CUI. }
-#   OPTIONAL { ?item wdt:P486 ?mesh. }
-#   OPTIONAL { ?item wdt:P494 ?icd10. }
-#   OPTIONAL { ?item wdt:P5806 ?Snomed_CT. }
-# }
-# """
 query_wordnet0 = """PREFIX bd: <http://www.bigdata.com/rdf#> 
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
 PREFIX schema: <http://schema.org/> 
@@ -184,8 +155,6 @@ def get_results(query, endpoint_url=endpoint_url):
 
 def results2csv(results, code_type):
     items = []
-    itemLabels = [] 
-    itemDescriptions = []
     codes = []
 
     for result in results["results"]["bindings"]:
